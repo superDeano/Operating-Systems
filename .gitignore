@@ -71,7 +71,6 @@ cmake-build-debug/
 *.iml
 *.xml
 .idea/workspace.xml
-.idea/workspace.xml
 *.xml
 *.cbp
 *.cbp

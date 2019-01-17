@@ -3,12 +3,14 @@ public class Main {
     public static void main(String[] args) {
 
         //Test array
-        int test[] = {1, 10, 3, 5, 7, 100, 69};
+        int test[] = {1, 10, 71, 3, 90, 360, 11, 5, 7, 100, 69};
 
-       int [] testingTest = qSort.sort(test);
+        System.out.println("The length of the array is " + test.length);
+
+        int[] testingTest = qSort.sort(test);
 
         for (int i = 0; i < testingTest.length; i++) {
-            System.out.println(testingTest[i]);
+            System.out.print(testingTest[i] + " ");
         }
 
 

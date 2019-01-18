@@ -14,9 +14,9 @@ public class qSort {
         int findingIndex;
 
         do {
-            findingIndex = (int) (Math.random() * lastIndex + startingIndex - 1);
+            findingIndex = (int) (Math.random() * lastIndex + startingIndex);
 
-        } while (findingIndex > maxLengthAllowedForArray);
+        } while (findingIndex > maxLengthAllowedForArray || findingIndex < 0);
 
         return findingIndex;
     }
@@ -43,6 +43,7 @@ public class qSort {
                 tempHolder = array[startingIndex];
                 array[startingIndex] = array[lastIndex];
                 array[lastIndex] = tempHolder;
+                System.out.println("Swapped");
             }
         }
     }

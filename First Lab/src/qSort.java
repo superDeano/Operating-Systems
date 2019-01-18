@@ -3,70 +3,86 @@ public class qSort {
     public static int[] sort(int[] array) {
 
         //  swapValues(array, 0, array.length - 1, getPivotIndex(0, array.length - 1));
-        recursiveCallToSwapValues(array, 0, array.length - 1);
+        sort(array, 0, array.length - 1);
 
         return array;
     }
 
 
     //Function which returns an index from the array which will be chosen as a pivot
-    private static int getPivotIndex(int startingIndex, int lastIndex, int maxLengthAllowedForArray) {
+    private static int getPivotIndex(int startingIndex, int lastIndex) {
         int findingIndex;
 
+<<<<<<< HEAD
         do {
             findingIndex = (int) (Math.random() * lastIndex + startingIndex);
 
         } while (findingIndex > maxLengthAllowedForArray || findingIndex < 0);
+=======
+        findingIndex = (int) (Math.random() * (lastIndex - startingIndex) + startingIndex);
+>>>>>>> 3586dee69c7e6a97ae6e78276923795f03096076
 
         return findingIndex;
     }
 
 
     //Function which swap Values
-    private static void swapValues(int[] array, int startingIndex, int lastIndex, int pivotIndex) {
+    private static int swapValues(int[] array, int left, int right
+            , int pivot) {
 
         System.out.println("\nInside the swapValues Function");
 
-        int pivot = array[pivotIndex];
-
         System.out.println("The Pivot is: " + pivot);
 
-        int tempHolder = 0;
+        while (left < right) {
+            while (array[++left] < pivot) ;
+            while (right != 0 && array[--right] > pivot) ;
 
+            System.out.println(left + " " + right);
 
-        while (array[startingIndex++] < pivot && startingIndex != lastIndex) {
-            while (array[lastIndex--] > pivot && startingIndex != lastIndex) {
+            //Swapping the values
+            swap(array, left, right);
 
-                System.out.println(startingIndex + " " + lastIndex);
-
+<<<<<<< HEAD
                 //Swapping the values
                 tempHolder = array[startingIndex];
                 array[startingIndex] = array[lastIndex];
                 array[lastIndex] = tempHolder;
                 System.out.println("Swapped");
             }
+=======
+>>>>>>> 3586dee69c7e6a97ae6e78276923795f03096076
         }
+        swap(array, left, right);
+        return left;
     }
 
 
-    private static void recursiveCallToSwapValues(int[] array, int startingIndex, int lastIndex) {
+    private static void sort(int[] array, int startingIndex, int lastIndex) {
 
-        if ((lastIndex - startingIndex) <= 1) {
-            return;
-        }
+        int pivotIndex = getPivotIndex(startingIndex, lastIndex);
 
-        int pivotIndex = getPivotIndex(startingIndex, lastIndex, array.length - 1);
+        int pivot = array[pivotIndex];
 
-        System.out.println("The Pivot index is " + pivotIndex);
+        swap(array,pivotIndex,lastIndex);
 
-        swapValues(array, startingIndex, lastIndex, pivotIndex);
+        int pivotPos = swapValues(array, startingIndex-1, lastIndex, pivot);
+
+        swap(array, pivotPos, lastIndex);
 
         //Call for the first part of the array
-        recursiveCallToSwapValues(array, startingIndex, pivotIndex);
+        if(pivotPos - startingIndex > 1)
+            sort(array, startingIndex, pivotPos-1);
 
         //Call for the second part of the array
-        recursiveCallToSwapValues(array, pivotIndex + 1, lastIndex);
+        if(lastIndex-pivotPos > 1)
+            sort(array, pivotPos + 1, lastIndex);
 
     }
 
+    private static void swap(int[] arr, int left, int right) {
+        int tempHolder = arr[left];
+        arr[left] = arr[right];
+        arr[right] = tempHolder;
+    }
 }

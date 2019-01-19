@@ -11,15 +11,8 @@ public class qSort {
 
     //Function which returns an index from the array which will be chosen as a pivot
     private static int getPivotIndex(int startingIndex, int lastIndex) {
-        int findingIndex;
 
-        do {
-            findingIndex = (int) (Math.random() * lastIndex + startingIndex);
-
-        } while (findingIndex > maxLengthAllowedForArray || findingIndex < 0);
-        findingIndex = (int) (Math.random() * (lastIndex - startingIndex) + startingIndex);
-
-        return findingIndex;
+        return (int)(Math.random() * (lastIndex - startingIndex) + startingIndex);
     }
 
 
@@ -39,12 +32,7 @@ public class qSort {
             //Swapping the values
             swap(array, left, right);
 
-                //Swapping the values
-                tempHolder = array[startingIndex];
-                array[startingIndex] = array[lastIndex];
-                array[lastIndex] = tempHolder;
-                System.out.println("Swapped");
-            }
+
         }
         swap(array, left, right);
         return left;

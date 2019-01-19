@@ -13,22 +13,18 @@ public class qSort {
     private static int getPivotIndex(int startingIndex, int lastIndex) {
         int findingIndex;
 
-<<<<<<< HEAD
         do {
             findingIndex = (int) (Math.random() * lastIndex + startingIndex);
 
         } while (findingIndex > maxLengthAllowedForArray || findingIndex < 0);
-=======
         findingIndex = (int) (Math.random() * (lastIndex - startingIndex) + startingIndex);
->>>>>>> 3586dee69c7e6a97ae6e78276923795f03096076
 
         return findingIndex;
     }
 
 
     //Function which swap Values
-    private static int swapValues(int[] array, int left, int right
-            , int pivot) {
+    private static int swapValues(int[] array, int left, int right, int pivot) {
 
         System.out.println("\nInside the swapValues Function");
 
@@ -43,15 +39,12 @@ public class qSort {
             //Swapping the values
             swap(array, left, right);
 
-<<<<<<< HEAD
                 //Swapping the values
                 tempHolder = array[startingIndex];
                 array[startingIndex] = array[lastIndex];
                 array[lastIndex] = tempHolder;
                 System.out.println("Swapped");
             }
-=======
->>>>>>> 3586dee69c7e6a97ae6e78276923795f03096076
         }
         swap(array, left, right);
         return left;

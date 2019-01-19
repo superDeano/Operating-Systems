@@ -1,33 +1,48 @@
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
 
-        int[] testingTest = {};
-        boolean error = false;
+        //Getting file from the Program Argument
+        File inputFile = new File(args[0] + " " + args[1]);
 
-        for(int i = 0; i < 1000; i++) {
-            //Test array
-            int test[] = {1, 10, 71, 3, 90, 360, 11, 5, 7, 100, 69};
+        //Buffer to read the file
+        try (Scanner readingFile = new Scanner(inputFile)) {
 
-            System.out.println("The length of the array is " + test.length);
+            //Gets the number of numbers from the first line from the Input.txt file
+            int lengthOfArray = Integer.parseInt(readingFile.nextLine());
 
-             testingTest = qSort.sort(test);
+            //Creates the array
+            int[] unsortedArray = new int[lengthOfArray];
 
-            for (int j = 1; j < testingTest.length; j++) {
-                if (testingTest[j] < testingTest[j - 1]) {
-                    error = true;
-                    break;
-                }
+            int index = 0;
+
+            do {
+                //Putting the numbers from the file into the array
+                unsortedArray[index] = Integer.parseInt(readingFile.nextLine());
+
+                index++;
+
+            } while (readingFile.hasNextLine());
+
+            //sorting the array using the quick sort algorithm
+            qSort.sort(unsortedArray);
+
+            //Creating the Output.txt file
+            PrintWriter writeToFile = new PrintWriter("Output.txt");
+
+            //Writing the result to the Output.txt file
+            for (int lineNumber = 0; lineNumber < unsortedArray.length; lineNumber++) {
+                writeToFile.println(unsortedArray[lineNumber]);
             }
-        }
+            //Closing the file
+            writeToFile.close();
 
-        if(error) {
-            System.out.println("Error");
-            for (int j = 0; j < testingTest.length; j++) {
-                System.out.print(testingTest[j] + " ");
-            }
-        }else{
-            System.out.println("Succeed");
+        } catch (Exception e) {
+            System.out.print(e);
         }
     }
 }

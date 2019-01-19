@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a9d7b25-98c7-4a58-8acf-cd2a964d5275" name="Default Changelist" comment="">
-<<<<<<< HEAD
-=======
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
->>>>>>> 3586dee69c7e6a97ae6e78276923795f03096076
       <change beforePath="$PROJECT_DIR$/src/qSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/qSort.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -31,7 +28,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="2511" />
+          <entry key="JAVA" value="3763" />
         </counts>
       </usages-collector>
     </session>
@@ -56,25 +53,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="24" column="40" lean-forward="true" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
+            <state relative-caret-position="450">
+              <caret line="30" column="62" lean-forward="true" selection-start-line="30" selection-start-column="62" selection-end-line="30" selection-end-column="62" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/qSort.java">
           <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-            <state relative-caret-position="403">
-              <caret line="45" column="43" selection-start-line="45" selection-start-column="43" selection-end-line="45" selection-end-column="43" />
-=======
-            <state relative-caret-position="115">
-              <caret line="39" column="33" lean-forward="true" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
->>>>>>> 3586dee69c7e6a97ae6e78276923795f03096076
+            <state relative-caret-position="214">
+              <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -94,8 +89,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/qSort.java" />
+        <option value="$PROJECT_DIR$/src/Main.java" />
       </list>
     </option>
   </component>
@@ -105,13 +100,14 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-<<<<<<< HEAD
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="714" />
-=======
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand />
+      <select />
+    </treeState>
+  </component>
   <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
     <option name="width" value="715" />
->>>>>>> 3586dee69c7e6a97ae6e78276923795f03096076
     <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -122,8 +118,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -140,6 +134,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -150,7 +146,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="Console" />
+    <property name="settings.editor.selected.configurable" value="preferences.customizations" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -168,7 +164,7 @@
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="First Lab" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/src/Input.txt" />
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Run" />
       <method v="2">
@@ -191,39 +187,29 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1547687169463</updated>
-<<<<<<< HEAD
       <workItem from="1547687172485" duration="8776000" />
-=======
       <workItem from="1547687172485" duration="7913000" />
       <workItem from="1547754232850" duration="3155000" />
->>>>>>> 3586dee69c7e6a97ae6e78276923795f03096076
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-<<<<<<< HEAD
-    <option name="totallyTimeSpent" value="8776000" />
+    <option name="totallyTimeSpent" value="13681000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-=======
-    <option name="totallyTimeSpent" value="11068000" />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1536" height="864" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
     <editor active="true" />
->>>>>>> 3586dee69c7e6a97ae6e78276923795f03096076
     <layout>
-      <window_info id="Image Layers" />
-      <window_info id="Capture Tool" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15637584" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.15637584" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
       <window_info id="Favorites" order="4" side_tool="true" />
+      <window_info id="Image Layers" order="5" />
+      <window_info id="Capture Tool" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32869786" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.23094426" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39823008" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -233,8 +219,6 @@
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Messages" order="11" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="right" id="Theme Preview" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -242,7 +226,9 @@
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="right" id="PlantUML" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
-      <window_info anchor="right" id="Maven Projects" order="7" />
+      <window_info anchor="right" id="Maven Projects" order="7" weight="0.3297568" />
+      <window_info anchor="right" id="Capture Analysis" order="8" />
+      <window_info anchor="right" id="Theme Preview" order="9" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -251,46 +237,28 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/qSort.java</url>
-          <line>25</line>
-          <properties />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/qSort.java</url>
-          <line>46</line>
-          <properties />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state relative-caret-position="270">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-=======
-        <state relative-caret-position="228">
-          <caret line="24" column="40" lean-forward="true" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
->>>>>>> 3586dee69c7e6a97ae6e78276923795f03096076
+        <state relative-caret-position="293">
+          <caret line="108" column="57" selection-start-line="108" selection-start-column="57" selection-end-line="108" selection-end-column="57" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/qSort.java">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state relative-caret-position="403">
-          <caret line="45" column="43" selection-start-line="45" selection-start-column="43" selection-end-line="45" selection-end-column="43" />
-=======
-        <state relative-caret-position="115">
-          <caret line="39" column="33" lean-forward="true" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
->>>>>>> 3586dee69c7e6a97ae6e78276923795f03096076
+        <state relative-caret-position="214">
+          <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" column="62" lean-forward="true" selection-start-line="30" selection-start-column="62" selection-end-line="30" selection-end-column="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

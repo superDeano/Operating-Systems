@@ -2,7 +2,6 @@ public class qSort {
 
     public static int[] sort(int[] array) {
 
-        //  swapValues(array, 0, array.length - 1, getPivotIndex(0, array.length - 1));
         sort(array, 0, array.length - 1);
 
         return array;
@@ -12,26 +11,19 @@ public class qSort {
     //Function which returns an index from the array which will be chosen as a pivot
     private static int getPivotIndex(int startingIndex, int lastIndex) {
 
-        return (int)(Math.random() * (lastIndex - startingIndex) + startingIndex);
+        return (int) (Math.random() * (lastIndex - startingIndex) + startingIndex);
     }
 
 
     //Function which swap Values
     private static int swapValues(int[] array, int left, int right, int pivot) {
 
-        System.out.println("\nInside the swapValues Function");
-
-        System.out.println("The Pivot is: " + pivot);
-
         while (left < right) {
             while (array[++left] < pivot) ;
             while (right != 0 && array[--right] > pivot) ;
 
-            System.out.println(left + " " + right);
-
             //Swapping the values
             swap(array, left, right);
-
 
         }
         swap(array, left, right);
@@ -45,18 +37,18 @@ public class qSort {
 
         int pivot = array[pivotIndex];
 
-        swap(array,pivotIndex,lastIndex);
+        swap(array, pivotIndex, lastIndex);
 
-        int pivotPos = swapValues(array, startingIndex-1, lastIndex, pivot);
+        int pivotPos = swapValues(array, startingIndex - 1, lastIndex, pivot);
 
         swap(array, pivotPos, lastIndex);
 
         //Call for the first part of the array
-        if(pivotPos - startingIndex > 1)
-            sort(array, startingIndex, pivotPos-1);
+        if (pivotPos - startingIndex > 1)
+            sort(array, startingIndex, pivotPos - 1);
 
         //Call for the second part of the array
-        if(lastIndex-pivotPos > 1)
+        if (lastIndex - pivotPos > 1)
             sort(array, pivotPos + 1, lastIndex);
 
     }

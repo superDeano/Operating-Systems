@@ -43,13 +43,28 @@ public class qSort {
 
         swap(array, pivotPos, lastIndex);
 
-        //Call for the first part of the array
-        if (pivotPos - startingIndex > 1)
-            sort(array, startingIndex, pivotPos - 1);
 
-        //Call for the second part of the array
-        if (lastIndex - pivotPos > 1)
-            sort(array, pivotPos + 1, lastIndex);
+        try {
+
+            //Call for the first part of the array
+            if (pivotPos - startingIndex > 1) {
+                Thread threadLeft = new Thread(() -> sort(array, startingIndex, pivotPos - 1));
+                threadLeft.start();
+                threadLeft.join();
+            }
+
+
+            //Call for the second part of the array
+            if (lastIndex - pivotPos > 1) {
+                Thread threadRight = new Thread(() -> sort(array, pivotPos + 1, lastIndex));
+                threadRight.start();
+                threadRight.join();
+            }
+
+        } catch (InterruptedException ex) {
+            System.out.println("Thread error");
+        }
+
 
     }
 

@@ -5,10 +5,17 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+        File inputFile;
 
         //Getting file from the Program Argument
-        File inputFile = new File(args[0] + " " + args[1]);
+        if (args.length > 1) {
+            inputFile = new File(args[0] + " " + args[1]);
+        } else {
+            //If there are no space in the program argument
+            inputFile = new File(args[0]);
+        }
 
+        //TODO: Create thread and join into the main
         //Buffer to read the file
         try (Scanner readingFile = new Scanner(inputFile)) {
 
@@ -26,7 +33,7 @@ public class Main {
 
                 index++;
 
-            } while (readingFile.hasNextLine());
+            } while (readingFile.hasNextLine() && index < lengthOfArray);
 
             //sorting the array using the quick sort algorithm
             qSort.sort(unsortedArray);

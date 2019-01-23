@@ -1,4 +1,4 @@
-public class qSort {
+public class qSortWithoutThreading {
 
     public static int[] sort(int[] array) {
 
@@ -39,30 +39,27 @@ public class qSort {
 
         swap(array, pivotIndex, lastIndex);
 
-        int pivotPos = swapValues(array, startingIndex - 1, lastIndex, pivot);
+        int pivotPosition = swapValues(array, startingIndex - 1, lastIndex, pivot);
 
-        swap(array, pivotPos, lastIndex);
+        swap(array, pivotPosition, lastIndex);
 
 
         try {
 
             //Call for the first part of the array
-            if (pivotPos - startingIndex > 1) {
-                Thread threadLeft = new Thread(() -> sort(array, startingIndex, pivotPos - 1));
-                threadLeft.start();
-                threadLeft.join();
+            if (pivotPosition - startingIndex > 1) {
+                sort(array, startingIndex, pivotPosition - 1);
+
             }
 
 
             //Call for the second part of the array
-            if (lastIndex - pivotPos > 1) {
-                Thread threadRight = new Thread(() -> sort(array, pivotPos + 1, lastIndex));
-                threadRight.start();
-                threadRight.join();
-            }
+            if (lastIndex - pivotPosition > 1) {
+                sort(array, pivotPosition + 1, lastIndex);
+                  }
 
-        } catch (InterruptedException ex) {
-            System.out.println("Thread error");
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
 
 
@@ -75,3 +72,5 @@ public class qSort {
         arr[right] = tempHolder;
     }
 }
+
+

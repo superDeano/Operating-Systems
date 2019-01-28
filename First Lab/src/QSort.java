@@ -1,5 +1,6 @@
-public class qSort {
+public class QSort {
 
+    //Public function
     public static int[] sort(int[] array) {
 
         sort(array, 0, array.length - 1);
@@ -24,19 +25,21 @@ public class qSort {
 
             //Swapping the values
             swap(array, left, right);
-
         }
+
         swap(array, left, right);
         return left;
     }
 
-
+    //Function which starts the Quick Sort
     private static void sort(int[] array, int startingIndex, int lastIndex) {
 
         int pivotIndex = getPivotIndex(startingIndex, lastIndex);
 
+        //Gets Pivots
         int pivot = array[pivotIndex];
 
+        //Swaps pivot
         swap(array, pivotIndex, lastIndex);
 
         int pivotPos = swapValues(array, startingIndex - 1, lastIndex, pivot);
@@ -45,20 +48,28 @@ public class qSort {
 
 
         try {
+            Thread threadLeft = null;
+            Thread threadRight = null;
 
             //Call for the first part of the array
             if (pivotPos - startingIndex > 1) {
-                Thread threadLeft = new Thread(() -> sort(array, startingIndex, pivotPos - 1));
+                threadLeft = new Thread(() -> sort(array, startingIndex, pivotPos - 1));
                 threadLeft.start();
-                threadLeft.join();
             }
 
 
             //Call for the second part of the array
             if (lastIndex - pivotPos > 1) {
-                Thread threadRight = new Thread(() -> sort(array, pivotPos + 1, lastIndex));
+                threadRight = new Thread(() -> sort(array, pivotPos + 1, lastIndex));
                 threadRight.start();
+            }
+
+            //To make sure that the main function is not waiting for all the running threads
+            if(threadRight != null){
                 threadRight.join();
+            }
+            if(threadLeft != null){
+                threadLeft.join();
             }
 
         } catch (InterruptedException ex) {

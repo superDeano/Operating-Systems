@@ -28,7 +28,7 @@ public class Testing {
 
         //Timing the sorting done with Threading
         startingTimeWithThreading = BigInteger.valueOf(System.nanoTime());
-        qSort.sort(testingArrayWithThread);
+        QSort.sort(testingArrayWithThread);
         endingTimeWithThreading = BigInteger.valueOf(System.nanoTime());
 
         BigInteger durationWithoutThreading = endingTimeWithoutThreading.subtract(startingTimeWithoutThreading);

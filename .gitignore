@@ -61,7 +61,8 @@ hs_err_pid*
 #Custom
 *.xml
 .idea/
-*.txt
+#Allow for the input and output txt
+#*.txt
 
 cmake-build-debug/
 

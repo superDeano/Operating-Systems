@@ -47,10 +47,12 @@ public class Main {
             } while (readingFile.hasNextLine() && index++ < lengthOfArray);
 
             //sorting the array using the quick sort algorithm
-            QSort.sort(unsortedArray);
+            Thread sorter = new Thread(() -> QSort.sort(unsortedArray));
+            sorter.start();
+            sorter.join();
 
             //Creating the Output.txt file
-            PrintWriter writeToFile = new PrintWriter("Output.txt");
+            PrintWriter writeToFile = new PrintWriter("output.txt");
 
             //Writing the result to the Output.txt file
             for (int lineNumber = 0; lineNumber < unsortedArray.length; lineNumber++) {

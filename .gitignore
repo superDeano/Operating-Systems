@@ -78,7 +78,9 @@ cmake-build-debug/
 *.xml
 *.xml
 
-/.idea
+*/.idea
+
+*/*/.idea/*
 
 *.make
 *.cxx

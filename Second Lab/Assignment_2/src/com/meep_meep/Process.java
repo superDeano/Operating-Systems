@@ -10,6 +10,12 @@ public class Process {
     private int counter = 0;
     private User user;
 
+    private Thread thread = new Thread(() -> {
+        while(true){
+            //Look dad! I'm doing something
+        }
+    });
+
     public Process(User user, int id, int enterTime, int duration) {
         this.enterTime = enterTime;
         this.duration = duration;
@@ -89,6 +95,7 @@ public class Process {
     }
 
     public ProcessStatus check(int i) {
+
         if (i == enterTime) {
             this.status = ProcessStatus.READY;
         } else if (counter == duration) {
@@ -96,6 +103,7 @@ public class Process {
         } else if (status == ProcessStatus.RESUMED) {
             increment();
         }
+
         return this.status;
     }
 

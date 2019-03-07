@@ -9,7 +9,7 @@ public class Process {
     private int duration;
     private int counter = 0;
     private User user;
-
+    private String userID;
     public Process(User user, int id, int enterTime, int duration) {
         this.enterTime = enterTime;
         this.duration = duration;
@@ -21,6 +21,14 @@ public class Process {
         } else {
             this.status = ProcessStatus.WAITING;
         }
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public ProcessStatus getStatus() {

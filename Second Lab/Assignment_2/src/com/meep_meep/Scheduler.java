@@ -38,7 +38,14 @@ public class Scheduler extends Thread {
         setupQueue();
 
         //Assume that number of users will not change
-        for (int time = startingTime; true; time++) {
+        for (int time = startingTime; true; time = (time++) % quantum) {
+
+            if (time == 0){
+                //Set Up
+            }
+            else {
+                //Execute threads
+            }
 
         }
     }
@@ -93,7 +100,7 @@ public class Scheduler extends Thread {
 
     private void divideTimeForUserProcesses() {
 
-        for (int i = 0; i < readyQueue.size(); i++){
+        for (int i = 0; i < readyQueue.size(); i++) {
 
         }
     }

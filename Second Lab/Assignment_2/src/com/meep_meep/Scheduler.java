@@ -10,7 +10,8 @@ public class Scheduler extends Thread {
 
     private Map<String, List<Process>> userProcessMap = new HashMap<>();
     private Map<Integer, Integer> mapProcessTime = new HashMap<>();
-private List<Process> allProcesses = new ArrayList<>();
+
+    private List<Process> allProcesses = new ArrayList<>();
     private Queue<Process> readyQueue = new ArrayDeque<>();
     private Queue<Process> bufferQueue = new ArrayDeque<>();
 
@@ -25,6 +26,7 @@ private List<Process> allProcesses = new ArrayList<>();
             list = new ArrayList<>();
             list.add(process);
             this.userProcessMap.put(process.getUser(), list);
+            allProcesses.add(process);
             numberOfUsers++;
         } else {
             list.add(process);
@@ -109,9 +111,9 @@ private List<Process> allProcesses = new ArrayList<>();
         for (Process process : readyQueue) {
             Integer temp = mapUserNumReadyProcess.get(process.getUser());
 
-            if(temp == null){
+            if (temp == null) {
                 mapUserNumReadyProcess.put(process.getUser(), 1);
-            }else{
+            } else {
                 mapUserNumReadyProcess.put(process.getUser(), temp + 1);
             }
         }
@@ -127,12 +129,16 @@ private List<Process> allProcesses = new ArrayList<>();
     /*Function which go through all the processes available at a given time and check if it's time for a process to be ready
      * */
     void putProcessInReadyQueue(int time) {
-        for (Process p : allProcesses ){
-        if (p.getEnterTime() == time){
-            p.setStatus(ProcessStatus.READY);
-            readyQueue.add(p);
-        }
+        for (Process p : allProcesses) {
+            if (p.getEnterTime() == time) {
+                p.setStatus(ProcessStatus.READY);
+                readyQueue.add(p);
+            }
         }
     }
 
+
+    public void receiveProcess(Process process) {
+        this.readyQueue.add(process);
+    }
 }

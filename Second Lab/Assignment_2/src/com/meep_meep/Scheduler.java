@@ -10,7 +10,7 @@ public class Scheduler extends Thread {
 
     private Map<String, List<Process>> userProcessMap = new HashMap<>();
     private Map<Integer, Integer> mapProcessTime = new HashMap<>();
-private List<Process> allProcesses = new ArrayList<>();
+    private List<Process> allProcesses = new ArrayList<>();
     private Queue<Process> readyQueue = new ArrayDeque<>();
     private Queue<Process> bufferQueue = new ArrayDeque<>();
 
@@ -46,7 +46,7 @@ private List<Process> allProcesses = new ArrayList<>();
         setUpReadyQueue();
         int elementsToPop = 0;
 
-        for (int time = 1, counter = 1; true; time++) {
+        for (int time = 1; true; time++) {
 
             putProcessInReadyQueue(time);
             //Vu qu'on commence a un, on set up a zero
@@ -57,7 +57,6 @@ private List<Process> allProcesses = new ArrayList<>();
             } else {
                 //   while (counter <= timeAllocatedPerProcess and counter < duration){
                 //Execute threads
-                counter++;
                 //
                 //}
             }
@@ -109,9 +108,9 @@ private List<Process> allProcesses = new ArrayList<>();
         for (Process process : readyQueue) {
             Integer temp = mapUserNumReadyProcess.get(process.getUser());
 
-            if(temp == null){
+            if (temp == null) {
                 mapUserNumReadyProcess.put(process.getUser(), 1);
-            }else{
+            } else {
                 mapUserNumReadyProcess.put(process.getUser(), temp + 1);
             }
         }
@@ -125,13 +124,15 @@ private List<Process> allProcesses = new ArrayList<>();
     }
 
     /*Function which go through all the processes available at a given time and check if it's time for a process to be ready
+     * if
      * */
     void putProcessInReadyQueue(int time) {
-        for (Process p : allProcesses ){
-        if (p.getEnterTime() == time){
-            p.setStatus(ProcessStatus.READY);
-            readyQueue.add(p);
-        }
+        for (Process p : allProcesses) {
+            if (p.getEnterTime() == time) {
+                p.setStatus(ProcessStatus.READY);
+                readyQueue.add(p);
+                allProcesses.remove(p);
+            }
         }
     }
 

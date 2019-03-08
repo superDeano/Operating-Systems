@@ -69,7 +69,7 @@ public class Scheduler extends Thread {
 //        return readyUsers;
         for (int atIndex = 0; atIndex < allProcesses.size(); atIndex++) {
             if (allProcesses.get(atIndex).getStatus() == ProcessStatus.READY) {
-                usersWithReadyProcesses.add(allProcesses.get(atIndex).getUserID());
+                usersWithReadyProcesses.add(allProcesses.get(atIndex).getUser().getName());
             }
         }
         return usersWithReadyProcesses.size();
@@ -89,7 +89,7 @@ public class Scheduler extends Thread {
 
         for (int atIndex = 0; atIndex < allProcesses.size(); atIndex++) {
             if (allProcesses.get(atIndex).getStatus() == ProcessStatus.READY) {
-                usersWithReadyProcesses.add(allProcesses.get(atIndex).getUserID());
+                usersWithReadyProcesses.add(allProcesses.get(atIndex).getUser().getName());
                 readyQueue.add(allProcesses.get(atIndex));
             }
         }

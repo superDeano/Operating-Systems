@@ -10,6 +10,7 @@ public class Scheduler extends Thread {
     private int numberOfUsers = 0;
     private Map<String, Queue<Process>> userQueueMap = new HashMap<>();
     private Queue<Process> readyProcesses = new ArrayDeque<>();
+    private Queue<Process> runningProcesses = new ArrayDeque<>();
 
     Scheduler(int quantum) {
         this.quantum = quantum;
@@ -38,9 +39,7 @@ public class Scheduler extends Thread {
 
     @Override
     public void run() {
-
-        setupQueue();
-
+        
 
         for (int time = 1, counter = 1; true; time = (time++) % quantum) {
 
@@ -51,16 +50,6 @@ public class Scheduler extends Thread {
                 //Execute threads
             }
 
-        }
-    }
-
-    public void setupQueue() {
-        for (Map.Entry<User, Queue<Process>> entry : userQueueMap.entrySet()) {
-            for (Process p : entry.getKey().getProcesses()) {
-                if (p.getStatus().equals(ProcessStatus.READY)) {
-                    entry.getValue().add(p);
-                }
-            }
         }
     }
 
@@ -101,6 +90,6 @@ public class Scheduler extends Thread {
     }
 
     void receiveProcess(Process p){
-
+        
     }
 }

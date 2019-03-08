@@ -20,6 +20,7 @@ public class Scheduler extends Thread {
     Scheduler(int quantum) {
         this.quantum = quantum;
 
+        //Creates an output stream to write output to file
         FileWriter outputFile = null;
 
         try {
@@ -78,8 +79,10 @@ public class Scheduler extends Thread {
             } else {
                 if(currentProcess == null) continue;
 
+                //Checks what the process is supposed to be like
                 ProcessStatus status = currentProcess.check(time);
 
+                //Then decides what to do with the process based on its status
                 if(status == ProcessStatus.FINISHED) {
                     userProcessMap.get(currentProcess.getUser()).remove(currentProcess);
                     currentProcess = readyQueue.poll();

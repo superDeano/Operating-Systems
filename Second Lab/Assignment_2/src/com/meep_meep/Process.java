@@ -17,6 +17,7 @@ public class Process {
     private Scheduler observerScheduler;
     private BufferedWriter writer;
 
+    // Creates a thread for the process
     private Thread thread = new Thread(() -> {
         while(true){
             synchronized (lock) {
@@ -59,50 +60,62 @@ public class Process {
         return status;
     }
 
+    // Getter
     public int getId() {
         return id;
     }
 
+    // Setter
     public void setId(int id) {
         this.id = id;
     }
 
+    // Getter
     public String getUser() {
         return user;
     }
 
+    // Setter
     public void setUser(String user) {
         this.user = user;
     }
 
+    // Setter
     public void setStatus(ProcessStatus status) {
         this.status = status;
     }
 
+    // Getter
     public int getEnterTime() {
         return enterTime;
     }
 
+    // Setter
     public void setEnterTime(int enterTime) {
         this.enterTime = enterTime;
     }
 
+    // Getter
     public int getDuration() {
         return duration;
     }
 
+    // Setter
     public void setDuration(int duration) {
         this.duration = duration;
     }
 
+    // Getter
     public int getCounter() {
         return counter;
     }
 
+    // Setter
     public void setCounter(int counter) {
         this.counter = counter;
     }
 
+    // Getter
     public BufferedWriter getWriter() {
         return writer;
     }
@@ -111,10 +124,12 @@ public class Process {
         this.writer = writer;
     }
 
+    // Getter
     public Scheduler getObserverScheduler() {
         return observerScheduler;
     }
 
+    // Setter
     public void setObserverScheduler(Scheduler observerScheduler) {
         this.observerScheduler = observerScheduler;
     }

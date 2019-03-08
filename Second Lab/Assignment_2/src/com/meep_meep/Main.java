@@ -87,7 +87,6 @@ public class Main {
 
     /*
      * Function which checks if a string does not contain numbers*/
-
     private static boolean isAlpha(String name) {
         char[] chars = name.toCharArray();
 

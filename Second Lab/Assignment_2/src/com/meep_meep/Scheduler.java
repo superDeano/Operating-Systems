@@ -43,7 +43,6 @@ public class Scheduler extends Thread {
     public void run() {
         setUpReadyQueue();
         int elementsToPop = 0;
-        for (int time = 1, counter = 1; true; time = (time++) % quantum) {
 
         for (int time = 1, counter = 1; true; time++) {
 

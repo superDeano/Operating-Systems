@@ -38,6 +38,12 @@ public class User {
         this.processes = processes;
     }
 
+    public void setScheduler(Scheduler scheduler) {
+        for(Process p: processes){
+            p.setObserverScheduler(scheduler);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

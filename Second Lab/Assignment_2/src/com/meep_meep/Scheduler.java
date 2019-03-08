@@ -5,7 +5,7 @@ import java.util.*;
 public class Scheduler extends Thread {
 
     private int quantum;
-    private int numUsersWithProcessesReady = 0;
+    private List<String> log = new ArrayList<>();
     private int numberOfUsers = 0;
 
     private Map<String, List<Process>> userProcessMap = new HashMap<>();
@@ -130,8 +130,8 @@ public class Scheduler extends Thread {
         waitingProcesses.remove(process);
     }
 
-    private void checkWaitingProcesses(int time){
-        for(Process p :waitingProcesses){
+    private void checkWaitingProcesses(int time) {
+        for (Process p : waitingProcesses) {
             p.check(time);
         }
     }

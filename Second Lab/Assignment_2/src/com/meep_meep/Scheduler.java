@@ -36,7 +36,7 @@ public class Scheduler extends Thread {
         setUpReadyQueue();
 
         Process currentProcess = null;
-        int timeToStay = 0;
+        Integer timeToStay = 0;
 
         for (int time = 1; true; time++) {
             checkWaitingProcesses(time);
@@ -45,21 +45,28 @@ public class Scheduler extends Thread {
             if (time == 1) {
                 // on check le nombre de process ready
                 //on divide le temps pour chaque process accordingly
-                setupForQuantumCycle();
+                divideTimePerProcess();
                 currentProcess = readyQueue.poll();
                 timeToStay = mapProcessTime.get(currentProcess.getId()) + time;
                 currentProcess.start();
             } else {
+                if(currentProcess == null) continue;
+
                 ProcessStatus status = currentProcess.check(time);
 
-                if(status == ProcessStatus.FINISHED){
+                if(status == ProcessStatus.FINISHED) {
                     userProcessMap.get(currentProcess.getUser()).remove(currentProcess);
                     currentProcess = readyQueue.poll();
-                    timeToStay = mapProcessTime.get(currentProcess.getId()) + time;
+
+                    timeToStay = getTimeThreshold(time, currentProcess);
+                }else if(timeToStay == null){
+                    //Runs till end of quantum (due to lack of decimal, time shares are rounded down.
+                    // Thus, the currentProcess may be a process not from the next cycle. It will run until the cycle finishes)
                 }else if(time >= timeToStay){
                     currentProcess.pause();
                     readyQueue.add(currentProcess);
                     currentProcess = readyQueue.poll();
+                    timeToStay = getTimeThreshold(time, currentProcess);
                 }else{
                     //Runs
                 }
@@ -105,8 +112,13 @@ public class Scheduler extends Thread {
         }
     }
 
-    void setupForQuantumCycle() {
+    private Integer getTimeThreshold(int time, Process p){
+        Integer allocatedTime = mapProcessTime.get(p.getId());
 
+        if(allocatedTime == null)
+            return null;
+        else
+            return time + allocatedTime;
     }
 
     private void divideTimePerProcess() {

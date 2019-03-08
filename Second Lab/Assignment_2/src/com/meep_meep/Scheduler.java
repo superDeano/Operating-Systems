@@ -41,12 +41,20 @@ public class Scheduler extends Thread {
     public void run() {
         setUpReadyQueue();
 
-        for (int time = 1, counter = 1; true; time = (time++) % quantum) {
+        for (int time = 1, counter = 1; true; time++) {
 
+            //
+            //Vu qu'on commence a un, on set up a zero
             if (time == 1) {
-                //Set Up
+                // on check le nombre de process ready
+                //on divide le temps pour chaque process accordingly
+                setupForQuantumCycle();
             } else {
+                //   while (counter <= timeAllocatedPerProcess and counter < duration){
                 //Execute threads
+                counter++;
+                //
+                //}
             }
 
         }
@@ -104,4 +112,11 @@ public class Scheduler extends Thread {
     void receiveProcess(Process p) {
 
     }
+
+    /*Function which go through all the processes available at a given time and check if it's time for a process to be ready
+     * */
+    void putProcessInReadyQueue(int time) {
+    
+    }
+
 }

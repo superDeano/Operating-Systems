@@ -6,13 +6,12 @@ public class Scheduler extends Thread {
 
     private int quantum;
     private List<String> log = new ArrayList<>();
-    private int numberOfUsers = 0;
 
     private Map<String, List<Process>> userProcessMap = new HashMap<>();
     private Map<Integer, Integer> mapProcessTime = new HashMap<>();
     private List<Process> waitingProcesses = new ArrayList<>();
     private Queue<Process> readyQueue = new ArrayDeque<>();
-    private Queue<Process> bufferQueue = new ArrayDeque<>();
+
 
     Scheduler(int quantum) {
         this.quantum = quantum;
@@ -26,7 +25,6 @@ public class Scheduler extends Thread {
             list.add(process);
             this.userProcessMap.put(process.getUser(), list);
             waitingProcesses.add(process);
-            numberOfUsers++;
         } else {
             list.add(process);
             //a List of all the processes we have
@@ -34,21 +32,14 @@ public class Scheduler extends Thread {
         }
     }
 
-    public void incrementTime() {
-        this.quantum++;
-    }
-
-    public void incrementTimeBy(int time) {
-        this.quantum += time;
-    }
-
     @Override
     public void run() {
         setUpReadyQueue();
-        int elementsToPop = 0;
+
+        Process currentProcess = null;
+        int timeToStay = 0;
 
         for (int time = 1; true; time++) {
-
             checkWaitingProcesses(time);
 
             //Vu qu'on commence a un, on set up a zero
@@ -56,11 +47,29 @@ public class Scheduler extends Thread {
                 // on check le nombre de process ready
                 //on divide le temps pour chaque process accordingly
                 setupForQuantumCycle();
+                currentProcess = readyQueue.poll();
+                timeToStay = mapProcessTime.get(currentProcess.getId()) + time;
+                currentProcess.start();
             } else {
-                //   while (counter <= timeAllocatedPerProcess and counter < duration){
-                //Execute threads
-                //
-                //}
+                ProcessStatus status = currentProcess.check(time);
+
+                if(status == ProcessStatus.FINISHED){
+                    userProcessMap.get(currentProcess.getUser()).remove(currentProcess);
+                    currentProcess = readyQueue.poll();
+                    timeToStay = mapProcessTime.get(currentProcess.getId()) + time;
+                }else if(time >= timeToStay){
+                    currentProcess.pause();
+                    readyQueue.add(currentProcess);
+                    currentProcess = readyQueue.poll();
+                }else{
+                    //Runs
+                }
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
         }

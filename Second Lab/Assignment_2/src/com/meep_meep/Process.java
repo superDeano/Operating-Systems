@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Process {
+
     private int id;
     private ProcessStatus status;
     private int enterTime;
@@ -38,6 +39,7 @@ public class Process {
         }
     });
 
+    // Constructor
     public Process(String user, int id, int enterTime, int duration, BufferedWriter writer) {
         this.enterTime = enterTime;
         this.duration = duration;
@@ -52,6 +54,7 @@ public class Process {
         }
     }
 
+    // Setters and Getters
     public ProcessStatus getStatus() {
         return status;
     }
@@ -116,18 +119,21 @@ public class Process {
         this.observerScheduler = observerScheduler;
     }
 
+    //Function which terminates a process
     private void finish() {
         this.status = ProcessStatus.FINISHED;
         this.thread.interrupt();
         print();
     }
 
+    //Function which pauses a process
     public void pause() {
         this.status = ProcessStatus.PAUSED;
         this.paused = true;
         print();
     }
 
+    //Function which resumes a process
     private void resume(boolean start) {
         this.status = ProcessStatus.RESUMED;
 
@@ -143,6 +149,7 @@ public class Process {
         print();
     }
 
+    //Function which starts a process
     public void start() {
 
         if(this.status == ProcessStatus.READY){
@@ -164,6 +171,7 @@ public class Process {
         this.counter++;
     }
 
+    //Function which writes the output of each process into a file
     private void print() {
         try {
             this.writer.write("User " + user + ", Process " + id + ", " + this.status);
@@ -172,6 +180,9 @@ public class Process {
         }
     }
 
+    /**
+     * Function which checks at a given time what a process's status is supposed to be
+     * */
     public ProcessStatus check(int i) {
 
         if (i == enterTime) {

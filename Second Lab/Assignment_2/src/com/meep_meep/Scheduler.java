@@ -16,7 +16,7 @@ public class Scheduler extends Thread {
     private Queue<Process> readyQueue = new ArrayDeque<>();
     private BufferedWriter outputWriter;
 
-
+    // Constructor
     Scheduler(int quantum) {
         this.quantum = quantum;
 
@@ -31,6 +31,7 @@ public class Scheduler extends Thread {
         BufferedWriter outputWriter = new BufferedWriter(outputFile);
     }
 
+    // Function which adds all the process to the waitingQueue
     public void addProcess(Process process) {
         process.setObserverScheduler(this);
         process.setWriter(outputWriter);
@@ -43,12 +44,16 @@ public class Scheduler extends Thread {
             waitingProcesses.add(process);
         } else {
             list.add(process);
-            //a List of all the processes we have
+            //a List of all the processes we which are still waiting
             waitingProcesses.add(process);
         }
     }
 
     @Override
+    /**
+     * The function which runs it all. The for loop simulates the scheduler.
+     * Checks the time each time for each process's status based on their time
+     * */
     public void run() {
         setUpReadyQueue();
 
@@ -58,10 +63,8 @@ public class Scheduler extends Thread {
         for (int time = 1; true; time++) {
             checkWaitingProcesses(time);
 
-            //Vu qu'on commence a un, on set up a zero
             if (time == 1) {
-                // on check le nombre de process ready
-                //on divide le temps pour chaque process accordingly
+                //divide for each process accordingly
                 divideTimePerProcess();
                 currentProcess = readyQueue.poll();
                 timeToStay = mapProcessTime.get(currentProcess.getId()) + time;
@@ -105,6 +108,9 @@ public class Scheduler extends Thread {
         }
     }
 
+    /**
+     *Function which calculates how many users have process which are ready.
+     **/
     private int getNumberReadyUsers() {
         Set<String> readyUsers = new HashSet<>();
         for (Map.Entry<String, List<Process>> entry : userProcessMap.entrySet()) {
@@ -120,7 +126,7 @@ public class Scheduler extends Thread {
         return readyUsers.size();
     }
 
-    /* This function sets up the scheduling:
+    /** This function sets up the scheduling:
      * Starts by counting the number of users with ready processes
      * Then adds the processes which are ready in the readyQueue
      */
@@ -145,6 +151,9 @@ public class Scheduler extends Thread {
             return time + allocatedTime;
     }
 
+    /**
+     * Function divides the time each process for each user will have to run
+     * */
     private void divideTimePerProcess() {
         mapProcessTime.clear();
 
@@ -169,11 +178,18 @@ public class Scheduler extends Thread {
 
     }
 
+    /**
+     * Function which put a process into the ready queue when it is ready
+     * also removes it from the waiting queue
+     * */
     public void receiveProcess(Process process) {
         this.readyQueue.add(process);
         waitingProcesses.remove(process);
     }
 
+    /**
+     * Function which check a process status at a given time
+     * */
     private void checkWaitingProcesses(int time) {
         for (Process p : waitingProcesses) {
             p.check(time);

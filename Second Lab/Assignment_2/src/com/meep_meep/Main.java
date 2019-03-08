@@ -65,8 +65,8 @@ public class Main {
                         int startTime = Integer.parseInt(lineSplitArray[firstColumnIndex].trim());
                         int duration = Integer.parseInt(lineSplitArray[secondColumnIndex].trim());
 
-                        scheduler.addProcess(new Process(userName, index, startTime, duration, null));
-                        index++;
+                        scheduler.addProcess(new Process(userName, ++index, startTime, duration, null));
+
                     }
                 }
             }
@@ -82,7 +82,8 @@ public class Main {
 
 
     /*
-     * Function which checks if a string does not contain numbers*/
+     * Function which checks if a string does not contain numbers
+     */
     private static boolean isAlpha(String name) {
         char[] chars = name.toCharArray();
 

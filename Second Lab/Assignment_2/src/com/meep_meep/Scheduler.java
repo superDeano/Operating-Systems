@@ -10,7 +10,7 @@ public class Scheduler extends Thread {
 
     private Map<String, List<Process>> userProcessMap = new HashMap<>();
     private Map<Integer, Integer> mapProcessTime = new HashMap<>();
-
+private List<Process> allProcesses = new ArrayList<>();
     private Queue<Process> readyQueue = new ArrayDeque<>();
     private Queue<Process> bufferQueue = new ArrayDeque<>();
 
@@ -28,6 +28,8 @@ public class Scheduler extends Thread {
             numberOfUsers++;
         } else {
             list.add(process);
+            //a List of all the processes we have
+            allProcesses.add(process);
         }
     }
 
@@ -46,7 +48,7 @@ public class Scheduler extends Thread {
 
         for (int time = 1, counter = 1; true; time++) {
 
-            //
+            putProcessInReadyQueue(time);
             //Vu qu'on commence a un, on set up a zero
             if (time == 1) {
                 // on check le nombre de process ready
@@ -125,7 +127,12 @@ public class Scheduler extends Thread {
     /*Function which go through all the processes available at a given time and check if it's time for a process to be ready
      * */
     void putProcessInReadyQueue(int time) {
-
+        for (Process p : allProcesses ){
+        if (p.getEnterTime() == time){
+            p.setStatus(ProcessStatus.READY);
+            readyQueue.add(p);
+        }
+        }
     }
 
 }

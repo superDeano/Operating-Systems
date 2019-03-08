@@ -6,9 +6,11 @@ public class Scheduler extends Thread {
 
     private int quantum;
     private int numUsersWithProcessesReady = 0;
-    private int timePerUser;
     private int numberOfUsers = 0;
-    private Map<String, Queue<Process>> userQueueMap = new HashMap<>();
+
+    private Map<String, List<Process>> userProcessMap = new HashMap<>();
+    private Map<Integer, Integer> mapProcessTime = new HashMap<>();
+
     private Queue<Process> readyQueue = new ArrayDeque<>();
     private Queue<Process> bufferQueue = new ArrayDeque<>();
 
@@ -18,14 +20,14 @@ public class Scheduler extends Thread {
 
     public void addProcess(Process process) {
         process.setObserverScheduler(this);
-        Queue<Process> queue = userQueueMap.get(process.getUser());
-        if (queue == null) {
-            queue = new ArrayDeque<>();
-            queue.add(process);
-            this.userQueueMap.put(process.getUser(), queue);
+        List<Process> list = userProcessMap.get(process.getUser());
+        if (list == null) {
+            list = new ArrayList<>();
+            list.add(process);
+            this.userProcessMap.put(process.getUser(), list);
             numberOfUsers++;
         } else {
-            queue.add(process);
+            list.add(process);
         }
     }
 
@@ -40,6 +42,8 @@ public class Scheduler extends Thread {
     @Override
     public void run() {
         setUpReadyQueue();
+        int elementsToPop = 0;
+        for (int time = 1, counter = 1; true; time = (time++) % quantum) {
 
         for (int time = 1, counter = 1; true; time++) {
 
@@ -62,7 +66,7 @@ public class Scheduler extends Thread {
 
     private int getNumberReadyUsers() {
         Set<String> readyUsers = new HashSet<>();
-        for (Map.Entry<String, Queue<Process>> entry : userQueueMap.entrySet()) {
+        for (Map.Entry<String, List<Process>> entry : userProcessMap.entrySet()) {
             Iterator<Process> it = entry.getValue().iterator();
 
             while (it.hasNext()) {
@@ -80,7 +84,7 @@ public class Scheduler extends Thread {
      * Then adds the processes which are ready in the readyQueue
      */
     private void setUpReadyQueue() {
-        for (Queue<Process> u : userQueueMap.values()) {
+        for (List<Process> u : userProcessMap.values()) {
             Iterator<Process> it = u.iterator();
             while (it.hasNext()) {
                 Process p = it.next();
@@ -95,28 +99,34 @@ public class Scheduler extends Thread {
 
     }
 
-    private int divideTimeForProcesses(String user) {
-        int counter = 0;
-        Iterator<Process> it = readyQueue.iterator();
+    private void divideTimePerProcess() {
+        mapProcessTime.clear();
 
-        while (it.hasNext()) {
-            Process process = it.next();
-            if (process.getUser().equals(user)) {
-                counter++;
+        int timePerUser = quantum / getNumberReadyUsers();
+        Map<String, Integer> mapUserNumReadyProcess = new HashMap<>();
+
+        for (Process process : readyQueue) {
+            Integer temp = mapUserNumReadyProcess.get(process.getUser());
+
+            if(temp == null){
+                mapUserNumReadyProcess.put(process.getUser(), 1);
+            }else{
+                mapUserNumReadyProcess.put(process.getUser(), temp + 1);
             }
         }
 
-        return counter;
-    }
-
-    void receiveProcess(Process p) {
+        int numProcessForUser;
+        for (Process process : readyQueue) {
+            numProcessForUser = mapUserNumReadyProcess.get(process.getUser());
+            mapProcessTime.put(process.getId(), timePerUser / numProcessForUser);
+        }
 
     }
 
     /*Function which go through all the processes available at a given time and check if it's time for a process to be ready
      * */
     void putProcessInReadyQueue(int time) {
-    
+
     }
 
 }

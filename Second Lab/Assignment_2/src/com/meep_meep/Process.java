@@ -160,12 +160,10 @@ public class Process {
 
     private void print(int time) {
         try {
-            this.writer.write("Time:" + time +", User " + user + ", Process " + id + ", " + this.status);
+            this.writer.write("Time:" + time +", User " + user + ", Process " + id + ", " + this.status+"\n");
         }catch (IOException e) {
             System.out.println("Cannot write for: " + "User " + user + ", Process " + id);
         }
-
-        System.out.println("Time:" + time +", User " + user + ", Process " + id + ", " + this.status);
     }
 
     public ProcessStatus check(int time) {

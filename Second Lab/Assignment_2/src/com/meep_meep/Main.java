@@ -8,8 +8,8 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        final int firstColumnIndex = 0;
-        final int secondColumnIndex = 1;
+        final int firstPart = 0;
+        final int secondPart = 1;
 
         //Used to open the Input file
         File inputFile;
@@ -48,13 +48,13 @@ public class Main {
                 lineSplitArray = fullLine.split("\\s", 2);
 
                 //First part without spaces
-                String first = lineSplitArray[firstColumnIndex].trim();
+                String first = lineSplitArray[firstPart].trim();
 
 
                 if (isAlpha(first)) {
 
-                    String userName = lineSplitArray[firstColumnIndex].trim();
-                    int numOfProcesses = Integer.parseInt(lineSplitArray[secondColumnIndex].trim());
+                    String userName = lineSplitArray[firstPart].trim();
+                    int numOfProcesses = Integer.parseInt(lineSplitArray[secondPart].trim());
 
                     int index = 0;
                     while (index < numOfProcesses) {
@@ -62,11 +62,11 @@ public class Main {
                         fullLine = readingLine.nextLine();
                         //Splits the line into two parts
                         lineSplitArray = fullLine.split("\\s", 2);
-                        int startTime = Integer.parseInt(lineSplitArray[firstColumnIndex].trim());
-                        int duration = Integer.parseInt(lineSplitArray[secondColumnIndex].trim());
+                        int startTime = Integer.parseInt(lineSplitArray[firstPart].trim());
+                        int duration = Integer.parseInt(lineSplitArray[secondPart].trim());
 
-                        scheduler.addProcess(new Process(userName, index, startTime, duration, null));
-                        index++;
+                        scheduler.addProcess(new Process(userName, ++index, startTime, duration, null));
+
                     }
                 }
             }
@@ -82,7 +82,8 @@ public class Main {
 
 
     /*
-     * Function which checks if a string does not contain numbers*/
+     * Function which checks if a string does not contain numbers
+     */
     private static boolean isAlpha(String name) {
         char[] chars = name.toCharArray();
 

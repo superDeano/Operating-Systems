@@ -9,8 +9,6 @@ public class Main {
     public static void main(String[] args) {
         final int firstColumnIndex = 0;
         final int secondColumnIndex = 1;
-        int userCounter = 0;
-        ArrayList<User> users = new ArrayList<>();
 
         //Used to open the Input file
         File inputFile;
@@ -39,45 +37,39 @@ public class Main {
             int quantumTime = Integer.parseInt(readingLine.nextLine());
 
             Scheduler scheduler = new Scheduler(quantumTime);
-            System.out.println("Quantum time is " + quantumTime);
-            String[] lineReadArray;
+
+            String[] lineSplitArray;
 
             while (readingLine.hasNextLine()) {
+                //Reads the full line
                 String fullLine = readingLine.nextLine();
-                lineReadArray = fullLine.split("\\s", 2);
-                String first = lineReadArray[firstColumnIndex].trim();
+                //Splits the line into two parts based on the tabs or spaces
+                lineSplitArray = fullLine.split("\\s", 2);
 
-                System.out.println(fullLine);
-//                System.out.println("First is "+ first);
+                //First part without spaces
+                String first = lineSplitArray[firstColumnIndex].trim();
+
 
                 if (isAlpha(first)) {
 
-                    String userName = lineReadArray[firstColumnIndex].trim();
-                    int numOfProcesses = Integer.parseInt(lineReadArray[secondColumnIndex].trim());
-                    users.add(new User(userName, numOfProcesses));
+                    String userName = lineSplitArray[firstColumnIndex].trim();
+                    int numOfProcesses = Integer.parseInt(lineSplitArray[secondColumnIndex].trim());
 
-                    System.out.println("here");
-                    System.out.println("User: " + userName + " number of Processes: " + numOfProcesses);
-
-                    Process processes[] = new Process[numOfProcesses];
                     int index = 0;
                     while (index < numOfProcesses) {
+                        //Reads full line
                         fullLine = readingLine.nextLine();
-                        System.out.println(fullLine);
-                        lineReadArray = fullLine.split("\\s", 2);
-                        int startTime = Integer.parseInt(lineReadArray[firstColumnIndex].trim());
-                        int duration = Integer.parseInt(lineReadArray[secondColumnIndex].trim());
+                        //Splits the line into two parts
+                        lineSplitArray = fullLine.split("\\s", 2);
+                        int startTime = Integer.parseInt(lineSplitArray[firstColumnIndex].trim());
+                        int duration = Integer.parseInt(lineSplitArray[secondColumnIndex].trim());
 
-                        System.out.println("Starting: " + startTime + " duration: " + duration);
-                        processes[index] = new Process(users.get(userCounter), index, startTime, duration);
+                        scheduler.addProcess(new Process(userName, index, startTime, duration));
                         index++;
                     }
-                    users.get(userCounter).setProcesses(processes);
-                    System.out.println(userCounter + 1 +  " users created");
-                    userCounter++;
                 }
             }
-
+            scheduler.start();
 
         } catch (Exception e) {
             System.out.println(e);

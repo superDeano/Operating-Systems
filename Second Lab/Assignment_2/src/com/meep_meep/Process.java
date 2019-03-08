@@ -12,7 +12,13 @@ public class Process {
 
     private Thread thread = new Thread(() -> {
         while(true){
-            //Look dad! I'm doing something
+            System.out.print("he");
+
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     });
 
@@ -63,6 +69,11 @@ public class Process {
 
     public void pause() {
         this.status = ProcessStatus.PAUSED;
+        try {
+            this.thread.wait();
+        } catch (InterruptedException e) {
+           System.out.println("User: " + this.user.getName() + " " + this.id + " -> cannot wait (oupsi daisy)");
+        }
         print();
     }
 
@@ -72,6 +83,11 @@ public class Process {
     }
 
     public void start() {
+        if(this.status == ProcessStatus.READY){
+            thread.start();
+        }else{
+            thread.notify();
+        }
         this.status = ProcessStatus.STARTED;
         print();
         this.resume();
@@ -79,6 +95,7 @@ public class Process {
 
     public void finish() {
         this.status = ProcessStatus.FINISHED;
+        this.thread.interrupt();
         print();
     }
 

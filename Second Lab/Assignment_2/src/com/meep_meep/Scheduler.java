@@ -1,6 +1,6 @@
 package com.meep_meep;
+
 import java.util.*;
-import java.util.concurrent.ConcurrentMap;
 
 public class Scheduler extends Thread {
 
@@ -9,8 +9,8 @@ public class Scheduler extends Thread {
     private int timePerUser;
     private int numberOfUsers = 0;
     private Map<String, Queue<Process>> userQueueMap = new HashMap<>();
-    private Queue<Process> readyProcesses = new ArrayDeque<>();
-    private Queue<Process> runningProcesses = new ArrayDeque<>();
+    private Queue<Process> readyQueue = new ArrayDeque<>();
+    private Queue<Process> bufferQueue = new ArrayDeque<>();
 
     Scheduler(int quantum) {
         this.quantum = quantum;
@@ -19,12 +19,12 @@ public class Scheduler extends Thread {
     public void addProcess(Process process) {
         process.setObserverScheduler(this);
         Queue<Process> queue = userQueueMap.get(process.getUser());
-        if(queue == null) {
+        if (queue == null) {
             queue = new ArrayDeque<>();
             queue.add(process);
             this.userQueueMap.put(process.getUser(), queue);
             numberOfUsers++;
-        }else{
+        } else {
             queue.add(process);
         }
     }
@@ -39,14 +39,13 @@ public class Scheduler extends Thread {
 
     @Override
     public void run() {
-        
+        setUpReadyQueue();
 
         for (int time = 1, counter = 1; true; time = (time++) % quantum) {
 
-            if (time == 1){
+            if (time == 1) {
                 //Set Up
-            }
-            else {
+            } else {
                 //Execute threads
             }
 
@@ -54,42 +53,55 @@ public class Scheduler extends Thread {
     }
 
     private int getNumberReadyUsers() {
-        int readyUsers = 0;
-        for(Map.Entry<User, Queue<Process>> p : userQueueMap.entrySet()){
-            if(!p.getValue().isEmpty())
-                readyUsers++;
+        Set<String> readyUsers = new HashSet<>();
+        for (Map.Entry<String, Queue<Process>> entry : userQueueMap.entrySet()) {
+            Iterator<Process> it = entry.getValue().iterator();
+
+            while (it.hasNext()) {
+                Process p = it.next();
+                if (p.getStatus() == ProcessStatus.READY) {
+                    readyUsers.add(p.getUser());
+                }
+            }
         }
-        return readyUsers;
+        return readyUsers.size();
     }
 
     /* This function sets up the scheduling:
      * Starts by counting the number of users with ready processes
      * Then adds the processes which are ready in the readyQueue
      */
-    private void setUp() {
-
-        for(Queue<Process> u: userQueueMap.values()){
+    private void setUpReadyQueue() {
+        for (Queue<Process> u : userQueueMap.values()) {
             Iterator<Process> it = u.iterator();
-            while(it.hasNext()){
+            while (it.hasNext()) {
                 Process p = it.next();
-                if(p.getStatus() == ProcessStatus.READY){
-                    this.readyProcesses.add(p);
+                if (p.getStatus() == ProcessStatus.READY) {
+                    this.readyQueue.add(p);
                 }
             }
         }
-
-        timePerUser = quantum /numberOfUsers;
     }
 
+    void setupForQuantumCycle() {
 
-    private void divideTimeForUserProcesses() {
+    }
 
-        for (int i = 0; i < readyQueue.size(); i++) {
+    private int divideTimeForProcesses(String user) {
+        int counter = 0;
+        Iterator<Process> it = readyQueue.iterator();
 
+        while (it.hasNext()) {
+            Process process = it.next();
+            if (process.getUser().equals(user)) {
+                counter++;
+            }
         }
+
+        return counter;
     }
 
-    void receiveProcess(Process p){
-        
+    void receiveProcess(Process p) {
+
     }
 }

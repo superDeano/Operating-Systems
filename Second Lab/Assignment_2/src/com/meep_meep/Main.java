@@ -1,7 +1,8 @@
 package com.meep_meep;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.PrintWriter;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -70,6 +71,13 @@ public class Main {
                 }
             }
             scheduler.start();
+
+            List<String> log = scheduler.getLog();
+            PrintWriter writeToFile = new PrintWriter("Output.txt");
+            for (String line: log){
+                writeToFile.println(line);
+            }
+            
 
         } catch (Exception e) {
             System.out.println(e);

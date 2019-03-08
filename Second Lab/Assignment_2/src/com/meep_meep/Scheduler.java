@@ -179,4 +179,8 @@ public class Scheduler extends Thread {
             p.check(time);
         }
     }
+
+    public List<String> getLog() {
+        return log;
+    }
 }

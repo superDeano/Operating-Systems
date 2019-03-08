@@ -1,7 +1,8 @@
 package com.meep_meep;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.BufferedWriter;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -12,7 +13,6 @@ public class Main {
 
         //Used to open the Input file
         File inputFile;
-
 
         //Getting file from the Program Argument
         if (args.length > 1) {
@@ -71,6 +71,9 @@ public class Main {
                 }
             }
             scheduler.start();
+
+            List<String> log = scheduler.getLog();
+            //Writing the output
 
         } catch (Exception e) {
             System.out.println(e);

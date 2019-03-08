@@ -19,13 +19,6 @@ public class Process {
     private Thread thread = new Thread(() -> {
         while(true){
             synchronized (lock) {
-                System.out.print(this.user+":"+this.id);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
                 if(paused) {
                     try {
                         this.lock.wait();
@@ -116,19 +109,19 @@ public class Process {
         this.observerScheduler = observerScheduler;
     }
 
-    private void finish() {
+    private void finish(int time) {
         this.status = ProcessStatus.FINISHED;
         this.thread.interrupt();
-        print();
+        print(time);
     }
 
-    public void pause() {
+    public void pause(int time) {
         this.status = ProcessStatus.PAUSED;
         this.paused = true;
-        print();
+        print(time);
     }
 
-    private void resume(boolean start) {
+    private void resume(boolean start, int time) {
         this.status = ProcessStatus.RESUMED;
 
         if(start){
@@ -140,19 +133,20 @@ public class Process {
             }
         }
 
-        print();
+        print(time);
     }
 
-    public void start() {
+    public void start(int time) {
 
         if(this.status == ProcessStatus.READY){
-            this.resume(true);
+            this.status = ProcessStatus.STARTED;
+            print(time);
+            this.resume(true, time);
         }else{
-            this.resume(false);
+            this.resume(false, time);
         }
 
-        this.status = ProcessStatus.STARTED;
-        print();
+
     }
 
 
@@ -164,22 +158,23 @@ public class Process {
         this.counter++;
     }
 
-    private void print() {
+    private void print(int time) {
         try {
-            this.writer.write("User " + user + ", Process " + id + ", " + this.status);
+            this.writer.write("Time:" + time +", User " + user + ", Process " + id + ", " + this.status);
         }catch (IOException e) {
             System.out.println("Cannot write for: " + "User " + user + ", Process " + id);
         }
+
+        System.out.println("Time:" + time +", User " + user + ", Process " + id + ", " + this.status);
     }
 
-    public ProcessStatus check(int i) {
+    public ProcessStatus check(int time) {
 
-        if (i == enterTime) {
+        if (time == enterTime) {
             this.status = ProcessStatus.READY;
-            this.observerScheduler.receiveProcess(this);
         } else if (counter == duration) {
             this.status = ProcessStatus.FINISHED;
-            finish();
+            finish(time);
         } else if (status == ProcessStatus.RESUMED) {
             increment();
         }

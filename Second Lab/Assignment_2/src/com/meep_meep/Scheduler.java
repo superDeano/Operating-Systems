@@ -11,7 +11,7 @@ public class Scheduler extends Thread {
     private List<String> log = new ArrayList<>();
 
     private Map<String, List<Process>> userProcessMap = new HashMap<>();
-    private Map<Integer, Integer> mapProcessTime = new HashMap<>();
+    private Map<Process, Integer> mapProcessTime = new HashMap<>();
     private List<Process> waitingProcesses = new ArrayList<>();
     private Queue<Process> readyQueue = new ArrayDeque<>();
     private BufferedWriter outputWriter;
@@ -28,7 +28,7 @@ public class Scheduler extends Thread {
             e.printStackTrace();
         }
 
-        BufferedWriter outputWriter = new BufferedWriter(outputFile);
+        outputWriter = new BufferedWriter(outputFile);
     }
 
     public void addProcess(Process process) {
@@ -58,14 +58,26 @@ public class Scheduler extends Thread {
         for (int time = 1; true; time++) {
             checkWaitingProcesses(time);
 
+            if(readyQueue.isEmpty() && currentProcess == null && waitingProcesses.isEmpty()){
+                Scanner input = new Scanner(System.in);
+                System.out.print("Most Probably done, exit? (y/n): ");
+                String result = input.nextLine();
+                if(result.toLowerCase().charAt(0) == 'y'){
+                    System.exit(1);
+                }
+            }
             //Vu qu'on commence a un, on set up a zero
-            if (time == 1) {
-                // on check le nombre de process ready
-                //on divide le temps pour chaque process accordingly
+            if (time % quantum == 1) {
+                System.out.println("**********NEW CYCLE**********");
+                if(currentProcess != null) {
+                    currentProcess.pause(time);
+                    readyQueue.add(currentProcess);
+                }
+
                 divideTimePerProcess();
                 currentProcess = readyQueue.poll();
-                timeToStay = mapProcessTime.get(currentProcess.getId()) + time;
-                currentProcess.start();
+                timeToStay = getTimeThreshold(time, currentProcess);
+                currentProcess.start(time);
 
                 try {
                     this.outputWriter.flush();
@@ -80,17 +92,24 @@ public class Scheduler extends Thread {
                 if(status == ProcessStatus.FINISHED) {
                     userProcessMap.get(currentProcess.getUser()).remove(currentProcess);
                     currentProcess = readyQueue.poll();
+
+                    if(currentProcess == null) {
+                        //Last process
+                        continue;
+                    }
                     timeToStay = getTimeThreshold(time, currentProcess);
-                    currentProcess.start();
+                    currentProcess.start(time);
+
                 }else if(timeToStay == null){
                     //Runs till end of quantum (due to lack of decimal, time shares are rounded down.
                     // Thus, the currentProcess may be a process not from the next cycle. It will run until the cycle finishes)
                 }else if(time >= timeToStay){
-                    currentProcess.pause();
+                    currentProcess.pause(time);
                     readyQueue.add(currentProcess);
+
                     currentProcess = readyQueue.poll();
                     timeToStay = getTimeThreshold(time, currentProcess);
-                    currentProcess.start();
+                    currentProcess.start(time);
                 }else{
                     //Runs
                 }
@@ -131,13 +150,14 @@ public class Scheduler extends Thread {
                 Process p = it.next();
                 if (p.getStatus() == ProcessStatus.READY) {
                     this.readyQueue.add(p);
+                    this.waitingProcesses.remove(p);
                 }
             }
         }
     }
 
     private Integer getTimeThreshold(int time, Process p){
-        Integer allocatedTime = mapProcessTime.get(p.getId());
+        Integer allocatedTime = mapProcessTime.get(p);
 
         if(allocatedTime == null)
             return null;
@@ -147,6 +167,8 @@ public class Scheduler extends Thread {
 
     private void divideTimePerProcess() {
         mapProcessTime.clear();
+
+        if(getNumberReadyUsers() == 0) return;
 
         int timePerUser = quantum / getNumberReadyUsers();
         Map<String, Integer> mapUserNumReadyProcess = new HashMap<>();
@@ -162,22 +184,24 @@ public class Scheduler extends Thread {
         }
 
         int numProcessForUser;
+
         for (Process process : readyQueue) {
             numProcessForUser = mapUserNumReadyProcess.get(process.getUser());
-            mapProcessTime.put(process.getId(), timePerUser / numProcessForUser);
+            mapProcessTime.put(process, timePerUser / numProcessForUser);
         }
 
-    }
-
-    public void receiveProcess(Process process) {
-        this.readyQueue.add(process);
-        waitingProcesses.remove(process);
     }
 
     private void checkWaitingProcesses(int time) {
+        List<Process> toRemove = new ArrayList<>();
+
         for (Process p : waitingProcesses) {
-            p.check(time);
+            if(p.check(time) == ProcessStatus.READY){
+                readyQueue.add(p);
+                toRemove.add(p);
+            }
         }
+        waitingProcesses.removeAll(toRemove);
     }
 
     public List<String> getLog() {

@@ -8,7 +8,7 @@ public class Scheduler extends Thread {
     private int numUsersWithProcessesReady = 0;
     private int numberOfUsers = 0;
 
-    private Map<String, Queue<Process>> userQueueMap = new HashMap<>();
+    private Map<String, List<Process>> userProcessMap = new HashMap<>();
     private Map<Integer, Integer> mapProcessTime = new HashMap<>();
 
     private Queue<Process> readyQueue = new ArrayDeque<>();
@@ -19,14 +19,14 @@ public class Scheduler extends Thread {
 
     public void addProcess(Process process) {
         process.setObserverScheduler(this);
-        Queue<Process> queue = userQueueMap.get(process.getUser());
-        if (queue == null) {
-            queue = new ArrayDeque<>();
-            queue.add(process);
-            this.userQueueMap.put(process.getUser(), queue);
+        List<Process> list = userProcessMap.get(process.getUser());
+        if (list == null) {
+            list = new ArrayList<>();
+            list.add(process);
+            this.userProcessMap.put(process.getUser(), list);
             numberOfUsers++;
         } else {
-            queue.add(process);
+            list.add(process);
         }
     }
 
@@ -55,7 +55,7 @@ public class Scheduler extends Thread {
 
     private int getNumberReadyUsers() {
         Set<String> readyUsers = new HashSet<>();
-        for (Map.Entry<String, Queue<Process>> entry : userQueueMap.entrySet()) {
+        for (Map.Entry<String, List<Process>> entry : userProcessMap.entrySet()) {
             Iterator<Process> it = entry.getValue().iterator();
 
             while (it.hasNext()) {
@@ -73,7 +73,7 @@ public class Scheduler extends Thread {
      * Then adds the processes which are ready in the readyQueue
      */
     private void setUpReadyQueue() {
-        for (Queue<Process> u : userQueueMap.values()) {
+        for (List<Process> u : userProcessMap.values()) {
             Iterator<Process> it = u.iterator();
             while (it.hasNext()) {
                 Process p = it.next();

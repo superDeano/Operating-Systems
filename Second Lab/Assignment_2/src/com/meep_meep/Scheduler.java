@@ -6,11 +6,12 @@ public class Scheduler extends Thread {
 
     private int quantum;
     private int numUsersWithProcessesReady = 0;
-    private int timePerUser;
     private int numberOfUsers = 0;
+
     private Map<String, Queue<Process>> userQueueMap = new HashMap<>();
+    private Map<Integer, Integer> mapProcessTime = new HashMap<>();
+
     private Queue<Process> readyQueue = new ArrayDeque<>();
-    private Queue<Process> bufferQueue = new ArrayDeque<>();
 
     Scheduler(int quantum) {
         this.quantum = quantum;
@@ -40,7 +41,7 @@ public class Scheduler extends Thread {
     @Override
     public void run() {
         setUpReadyQueue();
-
+        int elementsToPop = 0;
         for (int time = 1, counter = 1; true; time = (time++) % quantum) {
 
             if (time == 1) {
@@ -87,21 +88,30 @@ public class Scheduler extends Thread {
 
     }
 
-    private int divideTimeForProcesses(String user) {
+    private void divideTimePerProcess() {
         int counter = 0;
-        Iterator<Process> it = readyQueue.iterator();
+        int timePerUser = quantum / getNumberReadyUsers();
+        Map<String, Integer> mapUserNumReadyProcess = new HashMap<>();
 
-        while (it.hasNext()) {
-            Process process = it.next();
-            if (process.getUser().equals(user)) {
-                counter++;
+        for (Process process : readyQueue) {
+            Integer temp = mapUserNumReadyProcess.get(process.getUser());
+
+            if(temp == null){
+                mapUserNumReadyProcess.put(process.getUser(), 1);
+            }else{
+                mapUserNumReadyProcess.put(process.getUser(), temp + 1);
             }
         }
 
-        return counter;
+        int numProcessForUser;
+        for (Process process : readyQueue) {
+            numProcessForUser = mapUserNumReadyProcess.get(process.getUser());
+            mapProcessTime.put(process.getId(), timePerUser / numProcessForUser);
+        }
+
     }
 
-    void receiveProcess(Process p) {
-
-    }
+//    void receiveProcess(Process p) {
+//        this.readyQueue.add(p);
+//    }
 }

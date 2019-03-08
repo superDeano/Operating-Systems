@@ -9,15 +9,18 @@ public class Process {
     private int duration;
     private int counter = 0;
     private User user;
-
+    private final Object lock = new Object();
+    private boolean paused = false;
     private Thread thread = new Thread(() -> {
         while(true){
-            System.out.print("he");
-
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            synchronized (lock) {
+                if(paused) {
+                    try {
+                        this.lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     });
@@ -37,6 +40,22 @@ public class Process {
 
     public ProcessStatus getStatus() {
         return status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setStatus(ProcessStatus status) {
@@ -67,37 +86,46 @@ public class Process {
         this.counter = counter;
     }
 
-    public void pause() {
-        this.status = ProcessStatus.PAUSED;
-        try {
-            this.thread.wait();
-        } catch (InterruptedException e) {
-           System.out.println("User: " + this.user.getName() + " " + this.id + " -> cannot wait (oupsi daisy)");
-        }
-        print();
-    }
-
-    public void resume() {
-        this.status = ProcessStatus.RESUMED;
-        print();
-    }
-
-    public void start() {
-        if(this.status == ProcessStatus.READY){
-            thread.start();
-        }else{
-            thread.notify();
-        }
-        this.status = ProcessStatus.STARTED;
-        print();
-        this.resume();
-    }
-
     public void finish() {
         this.status = ProcessStatus.FINISHED;
         this.thread.interrupt();
         print();
     }
+
+    public void pause() {
+        this.status = ProcessStatus.PAUSED;
+        this.paused = true;
+        print();
+    }
+
+    private void resume(boolean start) {
+        this.status = ProcessStatus.RESUMED;
+
+        if(start){
+            thread.start();
+        }else{
+            synchronized (lock) {
+                this.paused = false;
+                lock.notify();
+            }
+        }
+
+        print();
+    }
+
+    public void start() {
+
+        if(this.status == ProcessStatus.READY){
+            this.resume(true);
+        }else{
+            this.resume(false);
+        }
+
+        this.status = ProcessStatus.STARTED;
+        print();
+
+    }
+
 
     public void ready() {
         this.status = ProcessStatus.READY;

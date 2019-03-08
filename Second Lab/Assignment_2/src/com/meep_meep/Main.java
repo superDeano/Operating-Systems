@@ -1,7 +1,7 @@
 package com.meep_meep;
 
 import java.io.File;
-import java.io.PrintWriter;
+import java.io.BufferedWriter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -73,11 +73,12 @@ public class Main {
             scheduler.start();
 
             List<String> log = scheduler.getLog();
+            //Writing the output
             PrintWriter writeToFile = new PrintWriter("Output.txt");
             for (String line: log){
                 writeToFile.println(line);
             }
-            
+            writeToFile.close();
 
         } catch (Exception e) {
             System.out.println(e);

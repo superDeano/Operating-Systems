@@ -25,6 +25,7 @@ public class Scheduler extends Thread {
             list = new ArrayList<>();
             list.add(process);
             this.userProcessMap.put(process.getUser(), list);
+            allProcesses.add(process);
             numberOfUsers++;
         } else {
             list.add(process);
@@ -136,4 +137,8 @@ public class Scheduler extends Thread {
         }
     }
 
+
+    public void receiveProcess(Process process) {
+        this.readyQueue.add(process);
+    }
 }

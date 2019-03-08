@@ -104,7 +104,7 @@ public class Process {
         this.observerScheduler = observerScheduler;
     }
 
-    public void finish() {
+    private void finish() {
         this.status = ProcessStatus.FINISHED;
         this.thread.interrupt();
         print();

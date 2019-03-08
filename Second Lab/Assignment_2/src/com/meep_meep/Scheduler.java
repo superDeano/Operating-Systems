@@ -10,7 +10,7 @@ public class Scheduler extends Thread {
 
     private Map<String, List<Process>> userProcessMap = new HashMap<>();
     private Map<Integer, Integer> mapProcessTime = new HashMap<>();
-    private List<Process> allWaitingProcesses = new ArrayList<>();
+    private List<Process> waitingProcesses = new ArrayList<>();
     private Queue<Process> readyQueue = new ArrayDeque<>();
     private Queue<Process> bufferQueue = new ArrayDeque<>();
 
@@ -25,12 +25,12 @@ public class Scheduler extends Thread {
             list = new ArrayList<>();
             list.add(process);
             this.userProcessMap.put(process.getUser(), list);
-            allWaitingProcesses.add(process);
+            waitingProcesses.add(process);
             numberOfUsers++;
         } else {
             list.add(process);
             //a List of all the processes we have
-            allWaitingProcesses.add(process);
+            waitingProcesses.add(process);
         }
     }
 
@@ -49,7 +49,8 @@ public class Scheduler extends Thread {
 
         for (int time = 1; true; time++) {
 
-            //Observable
+            checkWaitingProcesses(time);
+
             //Vu qu'on commence a un, on set up a zero
             if (time == 1) {
                 // on check le nombre de process ready
@@ -124,21 +125,14 @@ public class Scheduler extends Thread {
 
     }
 
-    /*Function which go through all the processes available at a given time and check if it's time for a process to be ready
-     * if a process is ready, it is removed from the list of all waiting processes
-     * */
-    void putProcessInReadyQueue(int time) {
-        for (Process p : allWaitingProcesses) {
-            if (p.getEnterTime() == time) {
-                p.setStatus(ProcessStatus.READY);
-                readyQueue.add(p);
-                allWaitingProcesses.remove(p);
-            }
-        }
-    }
-
-
     public void receiveProcess(Process process) {
         this.readyQueue.add(process);
+        waitingProcesses.remove(process);
+    }
+
+    private void checkWaitingProcesses(int time){
+        for(Process p :waitingProcesses){
+            p.check(time);
+        }
     }
 }

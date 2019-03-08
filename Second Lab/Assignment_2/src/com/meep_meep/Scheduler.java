@@ -89,7 +89,8 @@ public class Scheduler extends Thread {
     }
 
     private void divideTimePerProcess() {
-        int counter = 0;
+        mapProcessTime.clear();
+
         int timePerUser = quantum / getNumberReadyUsers();
         Map<String, Integer> mapUserNumReadyProcess = new HashMap<>();
 

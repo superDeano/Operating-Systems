@@ -1,6 +1,6 @@
 package com.meep_meep;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -12,6 +12,7 @@ public class Main {
 
         //Used to open the Input file
         File inputFile;
+
 
         //Getting file from the Program Argument
         if (args.length > 1) {
@@ -64,7 +65,7 @@ public class Main {
                         int startTime = Integer.parseInt(lineSplitArray[firstColumnIndex].trim());
                         int duration = Integer.parseInt(lineSplitArray[secondColumnIndex].trim());
 
-                        scheduler.addProcess(new Process(userName, index, startTime, duration));
+                        scheduler.addProcess(new Process(userName, index, startTime, duration, null));
                         index++;
                     }
                 }

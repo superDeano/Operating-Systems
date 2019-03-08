@@ -1,5 +1,7 @@
 package com.meep_meep;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.Objects;
 
 public class Process {
@@ -12,6 +14,7 @@ public class Process {
     private final Object lock = new Object();
     private boolean paused = false;
     private Scheduler observerScheduler;
+    private BufferedWriter writer;
 
     private Thread thread = new Thread(() -> {
         while(true){
@@ -35,11 +38,12 @@ public class Process {
         }
     });
 
-    public Process(String user, int id, int enterTime, int duration) {
+    public Process(String user, int id, int enterTime, int duration, BufferedWriter writer) {
         this.enterTime = enterTime;
         this.duration = duration;
         this.user = user;
         this.id = id;
+        this.writer = writer;
 
         if (enterTime == 1) {
             this.status = ProcessStatus.READY;
@@ -96,6 +100,14 @@ public class Process {
         this.counter = counter;
     }
 
+    public BufferedWriter getWriter() {
+        return writer;
+    }
+
+    public void setWriter(BufferedWriter writer) {
+        this.writer = writer;
+    }
+
     public Scheduler getObserverScheduler() {
         return observerScheduler;
     }
@@ -141,7 +153,6 @@ public class Process {
 
         this.status = ProcessStatus.STARTED;
         print();
-        increment();
     }
 
 
@@ -153,8 +164,12 @@ public class Process {
         this.counter++;
     }
 
-    private String print() {
-        return ("User " + user + ", Process " + id + ", " + this.status);
+    private void print() {
+        try {
+            this.writer.write("User " + user + ", Process " + id + ", " + this.status);
+        }catch (IOException e) {
+            System.out.println("Cannot write for: " + "User " + user + ", Process " + id);
+        }
     }
 
     public ProcessStatus check(int i) {

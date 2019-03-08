@@ -1,5 +1,8 @@
 package com.meep_meep;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class Scheduler extends Thread {
@@ -11,14 +14,27 @@ public class Scheduler extends Thread {
     private Map<Integer, Integer> mapProcessTime = new HashMap<>();
     private List<Process> waitingProcesses = new ArrayList<>();
     private Queue<Process> readyQueue = new ArrayDeque<>();
+    private BufferedWriter outputWriter;
 
 
     Scheduler(int quantum) {
         this.quantum = quantum;
+
+        FileWriter outputFile = null;
+
+        try {
+            outputFile = new FileWriter("output.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        BufferedWriter outputWriter = new BufferedWriter(outputFile);
     }
 
     public void addProcess(Process process) {
         process.setObserverScheduler(this);
+        process.setWriter(outputWriter);
+
         List<Process> list = userProcessMap.get(process.getUser());
         if (list == null) {
             list = new ArrayList<>();
@@ -50,6 +66,12 @@ public class Scheduler extends Thread {
                 currentProcess = readyQueue.poll();
                 timeToStay = mapProcessTime.get(currentProcess.getId()) + time;
                 currentProcess.start();
+
+                try {
+                    this.outputWriter.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else {
                 if(currentProcess == null) continue;
 
@@ -58,8 +80,8 @@ public class Scheduler extends Thread {
                 if(status == ProcessStatus.FINISHED) {
                     userProcessMap.get(currentProcess.getUser()).remove(currentProcess);
                     currentProcess = readyQueue.poll();
-
                     timeToStay = getTimeThreshold(time, currentProcess);
+                    currentProcess.start();
                 }else if(timeToStay == null){
                     //Runs till end of quantum (due to lack of decimal, time shares are rounded down.
                     // Thus, the currentProcess may be a process not from the next cycle. It will run until the cycle finishes)
@@ -68,6 +90,7 @@ public class Scheduler extends Thread {
                     readyQueue.add(currentProcess);
                     currentProcess = readyQueue.poll();
                     timeToStay = getTimeThreshold(time, currentProcess);
+                    currentProcess.start();
                 }else{
                     //Runs
                 }

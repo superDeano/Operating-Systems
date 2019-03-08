@@ -8,12 +8,21 @@ public class Process {
     private int enterTime;
     private int duration;
     private int counter = 0;
-    private User user;
+    private String user;
     private final Object lock = new Object();
     private boolean paused = false;
+    private Scheduler observerScheduler;
+
     private Thread thread = new Thread(() -> {
         while(true){
             synchronized (lock) {
+                System.out.print(this.user+":"+this.id);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 if(paused) {
                     try {
                         this.lock.wait();
@@ -21,11 +30,12 @@ public class Process {
                         e.printStackTrace();
                     }
                 }
+
             }
         }
     });
 
-    public Process(User user, int id, int enterTime, int duration) {
+    public Process(String user, int id, int enterTime, int duration) {
         this.enterTime = enterTime;
         this.duration = duration;
         this.user = user;
@@ -50,11 +60,11 @@ public class Process {
         this.id = id;
     }
 
-    public User getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
@@ -84,6 +94,14 @@ public class Process {
 
     public void setCounter(int counter) {
         this.counter = counter;
+    }
+
+    public Scheduler getObserverScheduler() {
+        return observerScheduler;
+    }
+
+    public void setObserverScheduler(Scheduler observerScheduler) {
+        this.observerScheduler = observerScheduler;
     }
 
     public void finish() {
@@ -136,7 +154,7 @@ public class Process {
     }
 
     private String print() {
-        return ("User " + user.getName() + ", Process " + id + ", " + this.status);
+        return ("User " + user + ", Process " + id + ", " + this.status);
     }
 
     public ProcessStatus check(int i) {
@@ -169,4 +187,6 @@ public class Process {
     public int hashCode() {
         return Objects.hash(id, status, enterTime, duration, counter, user);
     }
+
+
 }

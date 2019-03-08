@@ -161,6 +161,7 @@ public class Process {
 
         if (i == enterTime) {
             this.status = ProcessStatus.READY;
+            this.observerScheduler.receiveProcess(this);
         } else if (counter == duration) {
             this.status = ProcessStatus.FINISHED;
         } else if (status == ProcessStatus.RESUMED) {

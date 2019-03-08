@@ -142,7 +142,7 @@ public class Scheduler extends Thread {
 
             while (it.hasNext()) {
                 Process p = it.next();
-                if (p.getStatus() == ProcessStatus.READY) {
+                if (p.getStatus() != ProcessStatus.WAITING && p.getStatus() != ProcessStatus.FINISHED) {
                     readyUsers.add(p.getUser());
                 }
             }

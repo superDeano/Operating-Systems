@@ -69,6 +69,7 @@ public class Scheduler extends Thread {
                 System.out.print("Most Probably done, exit? (y/n): ");
                 String result = input.nextLine();
                 if(result.toLowerCase().charAt(0) == 'y'){
+                	this.outputWriter.close();
                     System.exit(1);
                 }
             }

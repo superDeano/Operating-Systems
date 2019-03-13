@@ -130,9 +130,9 @@ public class Scheduler extends Thread {
 
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         }
     }

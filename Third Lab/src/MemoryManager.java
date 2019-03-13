@@ -7,7 +7,7 @@ public class MemoryManager {
     Variable[] memory;
     Semaphore lock = new Semaphore(1);
 
-    MemoryManager(File file){
+    MemoryManager(File file) {
         try {
             Scanner input = new Scanner(file);
             memory = new Variable[input.nextInt()];
@@ -17,13 +17,13 @@ public class MemoryManager {
         }
     }
 
-    public void store(int id, int value){
+    public void store(int id, int value) {
         try {
 
             lock.acquire();
-            for(int i = 0; i< memory.length;i++){
-                if(memory[i] == null){
-                    memory[i] = new Variable(id,value);
+            for (int i = 0; i < memory.length; i++) {
+                if (memory[i] == null) {
+                    memory[i] = new Variable(id, value);
                     return;
                 }
             }
@@ -36,12 +36,13 @@ public class MemoryManager {
 
 
     }
-    public void release(int id){
+
+    public void release(int id) {
         try {
 
             lock.acquire();
-            for(int i = 0 ; i< memory.length; i++){
-                if(memory[i].getId() == id){
+            for (int i = 0; i < memory.length; i++) {
+                if (memory[i].getId() == id) {
                     memory[i] = null;
                 }
             }
@@ -51,22 +52,25 @@ public class MemoryManager {
             e.printStackTrace();
         }
     }
-    public Variable lookup(int id){
+
+    public Variable lookup(int id) {
+        Variable toReturn = null;
         try {
 
             lock.acquire();
-            Variable toReturn = null;
-            for(Variable var : memory){
-                if(var.getId() == id){
+            for (Variable var : memory) {
+                if (var.getId() == id) {
                     toReturn = var;
                 }
             }
             lock.release();
-            return toReturn;
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        return toReturn;
+
     }
 }
 

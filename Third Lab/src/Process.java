@@ -92,6 +92,10 @@ public class Process {
         print(time);
     }
 
+    public void check(){
+        //TODO check shit
+    }
+
     private void increment() {
         this.counter++;
     }

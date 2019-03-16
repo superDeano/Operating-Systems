@@ -1,11 +1,13 @@
 import java.time.Instant;
 
 public class Variable {
-    int id;
-    int value;
+    Integer id;
+    Integer value;
     Instant lastAccess;
 
     public Variable(int id, int value){
+        this.id = id;
+        this.value = value;
         lastAccess = Instant.now();
     }
 
@@ -32,7 +34,4 @@ public class Variable {
         return lastAccess;
     }
 
-    public void setLastAccess(Instant lastAccess) {
-        this.lastAccess = lastAccess;
-    }
 }

@@ -79,14 +79,9 @@ public class Process {
         print(time);
     }
 
-    public void pause(int time) {
-        this.paused = true;
-        print(time);
-    }
-
     public void start(int time) {
 
-            thread.start();
+        thread.start();
         if(paused){
             synchronized (lock) {
                 this.paused = false;
@@ -95,7 +90,10 @@ public class Process {
         }
 
         print(time);
+    }
 
+    public void check(){
+        //TODO check shit
     }
 
     private void increment() {

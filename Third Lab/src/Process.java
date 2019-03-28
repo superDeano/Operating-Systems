@@ -10,21 +10,18 @@ public class Process {
     private int duration;
     private int runtime;
     private int counter = 0;
-    private final Object lock = new Object();
-    private boolean paused = false;
     private BufferedWriter writer;
 
     private Thread thread = new Thread(() -> {
         while (true) {
-            synchronized (lock) {
-                if (paused) {
-                    try {
-                        this.lock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+            Command com = CommandManager.getNextCommand();
+            runCommand(com);
+            int toWait = (int)(Math.random()*1000 +1);
 
+            try {
+                Thread.sleep(toWait);
+            } catch (InterruptedException e) {
+                System.out.println("Got killed during wait process["+id+"]");
             }
         }
     });
@@ -83,24 +80,21 @@ public class Process {
     }
 
     public void start(int time) {
-
         thread.start();
-        if (paused) {
-            synchronized (lock) {
-                this.paused = false;
-                lock.notify();
-            }
-        }
-
         printStart(time);
     }
 
     public void check(int time) {
         runtime = time;
-    }
 
-    private void increment() {
-        this.counter++;
+        if(time >= enterTime){
+            start(time);
+        }else if(counter >= duration){
+            finish(time);
+        }else{
+            counter += 50;
+        }
+
     }
 
     private void printAction(int time, Command command, Variable result) {

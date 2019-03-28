@@ -11,6 +11,7 @@ public class Scheduler implements Runnable{
 
         for(int time = 0; true; time+=50){
 
+            notify(time);
 
             try {
                 Thread.sleep(200);

@@ -4,13 +4,13 @@ import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
 public class MemoryManager {
-    Page[] memory;
+    Variable[] memory;
     Semaphore lock = new Semaphore(1);
 
     MemoryManager(File file) {
         try {
             Scanner input = new Scanner(file);
-            memory = new Page[input.nextInt()]; // Creates main memory of Pages
+            memory = new Variable[input.nextInt()]; // Creates main memory of Pages
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -23,7 +23,7 @@ public class MemoryManager {
             lock.acquire();
             for (int i = 0; i < memory.length; i++) {
                 if (memory[i] == null) {
-                    memory[i] = new Page(new Integer(id), new Variable(new Integer(value)));
+                    memory[i] = new Variable(new Integer(id), new Integer(value));
                     return;
                 }
             }
@@ -42,7 +42,7 @@ public class MemoryManager {
 
             lock.acquire();
             for (int i = 0; i < memory.length; i++) {
-                if (memory[i].getVariableId()== id) {
+                if (memory[i].getId()== id) {
                     memory[i] = null;
                 }
             }
@@ -58,9 +58,9 @@ public class MemoryManager {
         try {
 
             lock.acquire();
-            for (Page var : memory) {
-                if (var.getVariableId() == id) {
-                    toReturn = var.getVariable();
+            for (Variable var : memory) {
+                if (var.getId() == id) {
+                    toReturn = var;
                 }
             }
             lock.release();

@@ -19,7 +19,7 @@ title __SRC's Class Diagram__\n
   
 
   package  {
-    class Driver {
+    class Scheduler {
         ~ processes : List<Process>
         + run()
         - setup()
@@ -103,8 +103,8 @@ title __SRC's Class Diagram__\n
   }
   
 
-  Driver -up-|> Runnable
-  Driver o-- CommandManager : commandManager
+  Scheduler -up-|> Runnable
+  Scheduler o-- CommandManager : commandManager
   Page o-- Variable : variable
 
 

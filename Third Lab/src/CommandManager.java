@@ -1,19 +1,26 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.*;
 
 public class CommandManager {
-    Scanner input;
+    static private Queue<Command> commands = new ArrayDeque<>();
 
-    public CommandManager(File file){
-        try {
-            this.input = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    public CommandManager(){
+    }
+
+    public static void setup(File file) throws FileNotFoundException {
+        Scanner input = new Scanner(file);
+        while(input.hasNext()){
+            ArrayList<String> str_command = new ArrayList<String>(Arrays.asList(input.nextLine().split(" ")));
+            String command = str_command.get(0);
+
+            Integer[] args = (Integer[]) str_command.subList(1, str_command.size()).stream().map(Integer::new).toArray();
+
+            commands.add(new Command(command,args));
         }
     }
 
-    public String getNextCommand(){
-        return input.hasNext() ? input.next() : null;
+    public static Command getNextCommand(){
+        return commands.poll();
     }
 }

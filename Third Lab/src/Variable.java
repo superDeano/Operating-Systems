@@ -5,10 +5,18 @@ public class Variable {
     Integer value;
     Instant lastAccess;
 
-    public Variable(int id, int value){
+    public Variable(int id, Integer value){
         this.id = id;
         this.value = value;
         lastAccess = Instant.now();
+    }
+
+    public Variable(String s){
+        String[] temp = s.split("&");
+
+        this.id = Integer.parseInt(temp[0]);
+        this.value = Integer.parseInt(temp[1]);
+        lastAccess = Instant.parse(temp[2]);
     }
 
     public int getId() {
@@ -20,7 +28,7 @@ public class Variable {
         this.id = id;
     }
 
-    public int getValue() {
+    public Integer getValue() {
         lastAccess = Instant.now();
         return value;
     }
@@ -34,4 +42,8 @@ public class Variable {
         return lastAccess;
     }
 
+    @Override
+    public String toString() {
+        return id +"&" + value +"&" + lastAccess;
+    }
 }

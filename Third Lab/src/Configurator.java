@@ -4,7 +4,11 @@ import java.util.List;
 
 public class Configurator {
 
-    public static List<Process> getProcesses(File file){
+    Configurator(Scheduler scheduler, File memoryConfig, File processesConfig, File commands){
+
+    }
+
+    private static List<Process> getProcesses(File file){
         return new ArrayList<>(0);
     }
 }

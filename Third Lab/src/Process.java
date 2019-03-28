@@ -1,20 +1,23 @@
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 public class Process {
     private int id;
     private int enterTime;
     private int duration;
+    private int runtime;
     private int counter = 0;
     private final Object lock = new Object();
     private boolean paused = false;
     private BufferedWriter writer;
 
     private Thread thread = new Thread(() -> {
-        while(true){
+        while (true) {
             synchronized (lock) {
-                if(paused) {
+                if (paused) {
                     try {
                         this.lock.wait();
                     } catch (InterruptedException e) {
@@ -76,34 +79,50 @@ public class Process {
 
     private void finish(int time) {
         this.thread.interrupt();
-        print(time);
+        printFinish(time);
     }
 
     public void start(int time) {
 
         thread.start();
-        if(paused){
+        if (paused) {
             synchronized (lock) {
                 this.paused = false;
                 lock.notify();
             }
         }
 
-        print(time);
+        printStart(time);
     }
 
-    public void check(){
-        //TODO check shit
+    public void check(int time) {
+        runtime = time;
     }
 
     private void increment() {
         this.counter++;
     }
 
-    private void print(int time) {
+    private void printAction(int time, Command command, Variable result) {
         try {
-            this.writer.write("Time:" + time +", Process " + id);
-        }catch (IOException e) {
+            this.writer.write("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable" + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
+        } catch (IOException e) {
+            System.out.println("Cannot write for: Process " + id);
+        }
+    }
+
+    private void printStart(int time) {
+        try {
+            this.writer.write("Clock:" + time + ", Process " + id + ": Start");
+        } catch (IOException e) {
+            System.out.println("Cannot write for: Process " + id);
+        }
+    }
+
+    private void printFinish(int time) {
+        try {
+            this.writer.write("Clock:" + time + ", Process " + id + ": Finished");
+        } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
         }
     }
@@ -124,5 +143,22 @@ public class Process {
         return Objects.hash(id, enterTime, duration, counter);
     }
 
+    public void runCommand(Command command) {
 
+        Method task = null;
+        try {
+            task = MemoryManager.class.getDeclaredMethod(command.getCommand(), command.getArguments().getClass());
+            Variable result = (Variable) task.invoke(null, command.getArguments());
+
+
+            printAction(runtime, command, result);
+
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
 }

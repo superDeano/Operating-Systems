@@ -20,10 +20,10 @@ public class MemoryManager {
 
     /**
      * Can only be executed by a process at once
-     * First tries to store the variable in the main memory
+     * First tries to Store the variable in the main memory
      * If there's no space, it then stores it in the disk
      */
-    public static Variable store(int id, int value) {
+    public static Variable Store(int id, int value) {
         boolean canWriteInMainMemory = false;
         Variable toStore = new Variable(id, value);
 
@@ -56,7 +56,7 @@ public class MemoryManager {
      * If it is, releases it and leaves that space for free
      * If the variable is in the disk, the variable is released
      */
-    public static Variable release(int id) {
+    public static Variable Release(int id) {
         boolean released = false;
         Variable toRelease = new Variable(id, null);
 
@@ -87,7 +87,7 @@ public class MemoryManager {
      * Then puts it in main memory if there is free space
      * If not, does a swap with the oldest accessed variable in main memory before readying
      */
-    public static Variable lookup(int id) {
+    public static Variable Lookup(int id) {
         Variable toReturn = null;
         boolean found = false;
         try {
@@ -105,7 +105,7 @@ public class MemoryManager {
                 Variable temp = disk.lookup(id); //Gets it from disk
 
                 if (mainMemoryHasSpace()) {
-                    store(temp.id, temp.value);
+                    Store(temp.id, temp.value);
                     disk.release(temp.id);
                     return temp;
                 } else { // Has to swap
@@ -114,8 +114,8 @@ public class MemoryManager {
                     Variable oldestVar = findOldestVariable();
 
                     disk.store(oldestVar);
-                    release(oldestVar.id);
-                    store(temp.id, temp.value);
+                    Release(oldestVar.id);
+                    Store(temp.id, temp.value);
 
                     toReturn = temp;
                 }

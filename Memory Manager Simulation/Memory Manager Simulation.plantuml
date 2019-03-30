@@ -1,6 +1,12 @@
 @startuml
 
-title __THIRD LAB's Class Diagram__\n
+title __MEMORY MANAGER SIMULATION's Class Diagram__\n
+
+  package  {
+    class Command {
+    }
+  }
+  
 
   package  {
     class CommandManager {
@@ -15,7 +21,7 @@ title __THIRD LAB's Class Diagram__\n
   
 
   package  {
-    class Scheduler {
+    class DiskMemory {
     }
   }
   
@@ -33,13 +39,13 @@ title __THIRD LAB's Class Diagram__\n
   
 
   package  {
-    class Page {
+    class Process {
     }
   }
   
 
   package  {
-    class Process {
+    class Scheduler {
     }
   }
   
@@ -52,7 +58,6 @@ title __THIRD LAB's Class Diagram__\n
 
   Scheduler -up-|> Runnable
   Scheduler o-- CommandManager : commandManager
-  Page o-- Variable : variable
 
 
 right footer

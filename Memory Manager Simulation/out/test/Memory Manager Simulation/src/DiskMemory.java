@@ -8,7 +8,7 @@ public class DiskMemory {
         this.file = file;
     }
 
-    //To store a variable in the disk
+    //To Store a variable in the disk
     public void store(Variable var) {
         try {
             FileWriter fr = new FileWriter(file, true);
@@ -73,9 +73,9 @@ public class DiskMemory {
                 System.out.println("Could not rename file");
 
         } catch (FileNotFoundException ex) {
-            System.out.println("Disk Exception [release]: " + ex.getMessage());
+            System.out.println("Disk Exception [Release]: " + ex.getMessage());
         } catch (IOException ex) {
-            System.out.println("Disk Exception [release]: " + ex.getMessage());
+            System.out.println("Disk Exception [Release]: " + ex.getMessage());
         }
     }
 

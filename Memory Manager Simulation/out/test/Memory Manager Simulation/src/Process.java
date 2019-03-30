@@ -148,20 +148,26 @@ public class Process {
              * Use Reflection API to match that command to a memory manager's method
              * Executes the API call then
              * */
-            Method task = MemoryManager.class.getDeclaredMethod(command.getCommand(), command.getArguments().getClass());
-
             switch (command.getArguments().length) {
                 case 2:
+                    Method task = MemoryManager.class.getDeclaredMethod(command.getCommand(), int.class, int.class);
+
                     Variable result = (Variable) task.invoke(null, command.getArguments()[firstArgument], command.getArguments()[secondArgument]);
+
                     printAction(runtime, command, result);
                     break;
+                    
                 default:
+                    task = MemoryManager.class.getDeclaredMethod(command.getCommand(), int.class);
+
                     result = (Variable) task.invoke(null, command.getArguments()[firstArgument]);
+
                     printAction(runtime, command, result);
             }
 
 
         } catch (NoSuchMethodException e) {
+            System.out.println("Cannot match method");
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();

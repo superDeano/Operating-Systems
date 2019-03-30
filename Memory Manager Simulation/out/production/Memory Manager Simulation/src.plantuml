@@ -3,26 +3,44 @@
 title __SRC's Class Diagram__\n
 
   package  {
+    class Command {
+        - command : String
+        - arguments : Integer[]
+        + Command()
+        + getCommand()
+        + setCommand()
+        + getArguments()
+        + setArguments()
+    }
+  }
+  
+
+  package  {
     class CommandManager {
-        ~ input : Scanner
+        {static} - commands : Queue<Command>
         + CommandManager()
-        + getNextCommand()
+        {static} + setup()
+        {static} + getNextCommand()
     }
   }
   
 
   package  {
     class Configurator {
-        {static} + getProcesses()
+        ~ Configurator()
+        {static} - getProcesses()
     }
   }
   
 
   package  {
-    class Scheduler {
-        ~ processes : List<Process>
-        + run()
-        - setup()
+    class DiskMemory {
+        - file : File
+        ~ DiskMemory()
+        + store()
+        + lookup()
+        + release()
+        + nukeDisk()
     }
   }
   
@@ -36,25 +54,16 @@ title __SRC's Class Diagram__\n
 
   package  {
     class MemoryManager {
-        ~ memory : Page[]
-        ~ lock : Semaphore
+        {static} - mainMemory : Variable[]
+        {static} - lock : Semaphore
+        {static} - disk : DiskMemory
         ~ MemoryManager()
-        + store()
-        + release()
-        + lookup()
-    }
-  }
-  
-
-  package  {
-    class Page {
-        - variableId : Integer
-        + Page()
-        + Page()
-        + getVariableId()
-        + setVariableID()
-        + getVariable()
-        + setVariable()
+        {static} + setup()
+        {static} + store()
+        {static} + release()
+        {static} + lookup()
+        {static} - mainMemoryHasSpace()
+        {static} - findOldestVariable()
     }
   }
   
@@ -64,9 +73,8 @@ title __SRC's Class Diagram__\n
         - id : int
         - enterTime : int
         - duration : int
+        - runtime : int
         - counter : int
-        - lock : Object
-        - paused : boolean
         - writer : BufferedWriter
         - thread : Thread
         + Process()
@@ -83,29 +91,46 @@ title __SRC's Class Diagram__\n
         - finish()
         + start()
         + check()
-        - increment()
-        - print()
+        - printAction()
+        - printStart()
+        - printFinish()
         + equals()
         + hashCode()
+        + runCommand()
+    }
+  }
+  
+
+  package  {
+    class Scheduler {
+        ~ processes : List<Process>
+        + run()
+        - setup()
+        + addProcess()
+        - notify()
     }
   }
   
 
   package  {
     class Variable {
+        ~ id : Integer
         ~ value : Integer
         ~ lastAccess : Instant
         + Variable()
+        + Variable()
+        + getId()
+        + setId()
         + getValue()
         + setValue()
         + getLastAccess()
+        + toString()
     }
   }
   
 
   Scheduler -up-|> Runnable
   Scheduler o-- CommandManager : commandManager
-  Page o-- Variable : variable
 
 
 right footer

@@ -25,8 +25,8 @@ public class Scheduler implements Runnable {
 
     private void setup() {
         try {
-            CommandManager.setup(new File("commands.txt"));
-            MemoryManager.setup(new File("memoryConfig.txt"), new File("disk.txt"));
+            CommandManager.setup(new File("./Testing/commands.txt"));
+            MemoryManager.setup(new File("./Testing/memconfig.txt"), new File("./Testing/disk.txt"));
         } catch (FileNotFoundException ex) {
             System.out.println(ex.getMessage());
         }

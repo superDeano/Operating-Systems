@@ -17,9 +17,8 @@ public class Main {
             for (int i = 1; input.hasNextLine(); i++) {
                 String[] temp = input.nextLine().split(" ");
                 scheduler.addProcess(new Process(i, Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), writer));
-                System.out.println(i);
             }
-
+            scheduler.run();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException ex) {

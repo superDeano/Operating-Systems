@@ -10,6 +10,7 @@ public class Process {
     private int duration;
     private int runtime;
     private int counter = 0;
+    private boolean isRunning = false;
     private BufferedWriter writer;
 
     private Thread thread = new Thread(() -> {
@@ -76,6 +77,7 @@ public class Process {
 
     private void finish(int time) {
         this.thread.interrupt();
+        isRunning = false;
         printFinish(time);
     }
 
@@ -89,9 +91,10 @@ public class Process {
 
         if (time >= enterTime) {
             start(time);
+            isRunning = true;
         } else if (counter >= duration) {
             finish(time);
-        } else {
+        } else if (isRunning) { // Counter must be incremented only if thread is running
             counter += 50;
         }
 

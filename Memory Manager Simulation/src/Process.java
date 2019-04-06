@@ -76,6 +76,10 @@ public class Process {
         this.writer = writer;
     }
 
+    public boolean isRunning() {
+        return isRunning;
+    }
+
     private void finish(int time) {
         this.thread.interrupt();
         isRunning = false;
@@ -105,8 +109,9 @@ public class Process {
 
     private void printAction(int time, Command command, Variable result) {
         try {
-            System.out.println("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
-            this.writer.write("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
+            System.out.println("Clock:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
+            this.writer.write("Clock:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
+            this.writer.flush();
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
         }
@@ -116,6 +121,7 @@ public class Process {
         try {
             System.out.println("Clock:" + time + ", Process " + id + ": Start");
             this.writer.write("Clock:" + time + ", Process " + id + ": Start");
+            this.writer.flush();
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
         }
@@ -125,6 +131,7 @@ public class Process {
         try {
             System.out.println("Clock:" + time + ", Process " + id + ": Finished");
             this.writer.write("Clock:" + time + ", Process " + id + ": Finished");
+            this.writer.flush();
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
         }
@@ -147,6 +154,7 @@ public class Process {
     }
 
     public void runCommand(Command command) {
+        if (command == null) return;
 
         final int firstArgument = 0;
         final int secondArgument = 1;

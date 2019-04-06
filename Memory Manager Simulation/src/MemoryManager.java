@@ -12,10 +12,12 @@ public class MemoryManager {
     MemoryManager() {
     }
 
-    public static void setup(File memConfig, File diskFile) throws FileNotFoundException {
+    public static void setup(File memConfig, String diskFile) throws FileNotFoundException {
         Scanner input = new Scanner(memConfig);
         mainMemory = new Variable[input.nextInt()]; // Creates main mainMemory of Pages
         disk = new DiskMemory(diskFile);
+
+        input.close();
     }
 
     public static DiskMemory getDiskMemoryInstance(){
@@ -45,7 +47,7 @@ public class MemoryManager {
             }
 
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //interrupted
         } finally {
             lock.release();
         }
@@ -75,7 +77,7 @@ public class MemoryManager {
                 disk.release(id);
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //interrupted
         } finally {
             lock.release();
         }
@@ -124,7 +126,7 @@ public class MemoryManager {
             }
 
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //got interrupted
         } finally {
             lock.release();
         }

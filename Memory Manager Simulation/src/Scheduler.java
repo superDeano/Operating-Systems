@@ -15,7 +15,7 @@ public class Scheduler implements Runnable {
 
         for (int time = 0; true; time += 50) {
 
-            if(noCommands){
+            if(noCommands && allProcessFinished()){
                 //No more commands
                 System.out.println("No more commands, program is finished");
                 break;
@@ -33,9 +33,9 @@ public class Scheduler implements Runnable {
 
     private void setup() {
         try {
-            CommandManager.setup(new File("./Testing/commands.txt"));
+            CommandManager.setup(new File("Testing/commands.txt"));
             CommandManager.subscribe(this);
-            MemoryManager.setup(new File("./Testing/memconfig.txt"), new File("./Testing/disk.txt"));
+            MemoryManager.setup(new File("Testing/memconfig.txt"),"Testing/disk.txt");
         } catch (FileNotFoundException ex) {
             System.out.println(ex.getMessage());
         }
@@ -53,5 +53,9 @@ public class Scheduler implements Runnable {
         if(i == 0){
             noCommands = true;
         }
+    }
+
+    private boolean allProcessFinished(){
+       return processes.stream().allMatch(process -> !process.isRunning());
     }
 }

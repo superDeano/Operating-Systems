@@ -93,7 +93,7 @@ public class Process {
         if (time == enterTime) {
             start(time);
             isRunning = true;
-        } else if (counter == duration & isRunning) {
+        } else if (counter == duration && isRunning) {
             finish(time);
         } else if (isRunning) { // Counter must be incremented only if thread is running
             counter += 50;
@@ -105,8 +105,8 @@ public class Process {
 
     private void printAction(int time, Command command, Variable result) {
         try {
-            System.out.println("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable" + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
-            this.writer.write("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable" + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
+            System.out.println("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
+            this.writer.write("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
         }

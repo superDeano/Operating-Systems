@@ -18,7 +18,7 @@ public class CommandManager {
 
             //Creates a new sub-array of integer for the arguments of the command
             Integer[] args = Arrays.copyOf(str_command.subList(1, str_command.size()).stream().map(Integer::new).toArray(), str_command.subList(1, str_command.size()).stream().map(Integer::new).toArray().length, Integer[].class);
-            commands.add(new Command(command, args));
+            commands.add(new Command(command.toLowerCase(), args));
         }
     }
 

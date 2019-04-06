@@ -23,17 +23,18 @@ public class Scheduler implements Runnable {
             notify(time);
 
             try {
-                Thread.sleep(50);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
     /**
      * To get the commands before the processes start running
      * To set up the virtual memory
-     * */
+     */
     private void setup() {
         try {
             CommandManager.setup(new File("Testing/commands.txt"));

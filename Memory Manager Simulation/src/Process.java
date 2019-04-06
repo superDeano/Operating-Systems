@@ -23,6 +23,7 @@ public class Process {
             try {
                 Thread.sleep(toWait);
             } catch (InterruptedException e) {
+                System.out.println(e.getCause());
                 System.out.println("Got killed during wait process[" + id + "]");
             }
         }
@@ -99,12 +100,12 @@ public class Process {
         if (time == enterTime) {
             start(time);
             threadStartedRunning = true;
-            counter+=50;
+            counter += 100;
         } else if (counter == duration && threadStartedRunning) {
             finish(time);
         } else if (threadStartedRunning) { // Counter must be incremented only if thread is running
-            counter += 50;
-        }else{
+            counter += 100;
+        } else {
             //Dead Process
         }
 
@@ -114,15 +115,15 @@ public class Process {
     private void printAction(int time, Command command, Variable result) {
         try {
             // To print if swap has happened
-            if (result.getSwapped() != null){
-                Integer [] swapped = result.getSwapped();
-                System.out.println("Memory Manager, SWAP: Variable " + swapped[Variable.oldVariable] + " with Variable " + swapped[Variable.newVariable]);
-                this.writer.write("Memory Manager, SWAP: Variable " + swapped[Variable.oldVariable] + " with Variable " + swapped[Variable.newVariable]);
+            if (result.getSwapped() != null) {
+                Integer[] swapped = result.getSwapped();
+                System.out.println("Clock: " + time + ", Memory Manager, SWAP: Variable " + swapped[Variable.oldVariable] + " with Variable " + swapped[Variable.newVariable]);
+                this.writer.write("Clock: " + time + ", Memory Manager, SWAP: Variable " + swapped[Variable.oldVariable] + " with Variable " + swapped[Variable.newVariable]);
                 writer.newLine();
             }
 
             System.out.println("Clock: " + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
-            this.writer.write("Clock: " + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : "\n"));
+            this.writer.write("Clock: " + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
             writer.newLine();
             this.writer.flush();
         } catch (IOException e) {
@@ -202,10 +203,13 @@ public class Process {
         } catch (NoSuchMethodException e) {
             System.out.println("Cannot match method");
             e.printStackTrace();
+            System.out.println(e.getCause());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            System.out.println(e.getCause());
         } catch (InvocationTargetException e) {
             e.printStackTrace();
+            System.out.println(e.getCause());
         }
     }
 }

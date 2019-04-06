@@ -1,15 +1,18 @@
 import java.io.*;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.Scanner;
 
 public class DiskMemory {
     private File file;
 
-    DiskMemory(File file) {
-        this.file = file;
+    DiskMemory(String path) {
+        this.file = new File(path);
     }
 
-    //To Store a variable in the disk
-    public void store(Variable var) {
+    //To store a variable in the disk
+    public synchronized void store(Variable var) {
         try {
             FileWriter fr = new FileWriter(file, true);
             BufferedWriter br = new BufferedWriter(fr);
@@ -18,35 +21,40 @@ public class DiskMemory {
             br.close();
             fr.close();
         } catch (IOException e) {
-            System.out.println("Disk Exception [Store]: " + e.getMessage());
+            System.out.println("Disk Exception [store]: " + e.getMessage());
         }
     }
 
     // Goes through the file (disk) to look for the variable
-    public Variable lookup(int id) {
+    public synchronized Variable lookup(int id) {
+        Variable toReturn = null;
         try {
             Scanner input = new Scanner(file);
             while (input.hasNext()) {
                 String var = input.nextLine();
                 if (Integer.parseInt(var.split("&")[0]) == id) {
-                    return new Variable(var);
+                    toReturn = new Variable(var);
                 }
             }
+            input.close();
         } catch (FileNotFoundException e) {
             System.out.println("Disk Exception [read]: " + e.getMessage());
             return null;
         }
-        return null;
+        return toReturn;
     }
 
-    public void release(int id) {
+    public synchronized void release(int id) {
 
         try {
             //Construct the new file that will later be renamed to the original filename.
             File tempFile = new File(file.getAbsolutePath() + ".tmp");
 
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            PrintWriter pw = new PrintWriter(new FileWriter(tempFile));
+            FileReader fileReader = new FileReader(file);
+            FileWriter fileWriter = new FileWriter(tempFile);
+
+            BufferedReader br = new BufferedReader(fileReader);
+            PrintWriter pw = new PrintWriter(fileWriter);
 
             String line = null;
 
@@ -61,26 +69,39 @@ public class DiskMemory {
             }
             pw.close();
             br.close();
+            fileReader.close();
+            fileWriter.close();
 
             //Delete the original file
-            if (!file.delete()) {
-                System.out.println("Could not delete file");
-                return;
+
+            try{
+                Files.delete(file.toPath());
+            } catch (NoSuchFileException x) {
+               System.out.println("Delete Failed: no such  file or directory");
+            } catch (DirectoryNotEmptyException x) {
+                System.out.println("Error: Directory not empty when deleting file");
+            } catch (IOException x) {
+                // File permission problems are caught here.
+                System.err.println(x);
             }
+//            if (!file.delete()) {
+//                System.out.println("Could not delete file");
+//                return;
+//            }
 
             //Rename the new file to the filename the original file had.
             if (!tempFile.renameTo(file))
                 System.out.println("Could not rename file");
 
         } catch (FileNotFoundException ex) {
-            System.out.println("Disk Exception [Release]: " + ex.getMessage());
+            System.out.println("Disk Exception [release]: " + ex.getMessage());
         } catch (IOException ex) {
-            System.out.println("Disk Exception [Release]: " + ex.getMessage());
+            System.out.println("Disk Exception [release]: " + ex.getMessage());
         }
     }
 
     //Deletes the whole disk
-    public void nukeDisk() {
+    public synchronized void nukeDisk() {
         try {
             PrintWriter writer = new PrintWriter(file);
             writer.print("");

@@ -11,11 +11,11 @@ public class Process {
     private int runtime;
     private int counter = 0;
     private boolean threadStartedRunning = false;
+    private boolean isKilled = false;
     private BufferedWriter writer;
-    private Object lock = new Object();
 
     private Thread thread = new Thread(() -> {
-        while (true) {
+        while (!isKilled) {
             Command com = CommandManager.getNextCommand();
             runCommand(com);
             int toWait = (int) (Math.random() * 1000 + 1);
@@ -27,6 +27,7 @@ public class Process {
             }
         }
     });
+
 
     public Process(int id, int enterTime, int duration, BufferedWriter writer) {
         this.enterTime = enterTime;
@@ -76,17 +77,19 @@ public class Process {
         this.writer = writer;
     }
 
+    public boolean isRunning() {
+        return threadStartedRunning;
+    }
+
     private void finish(int time) {
         this.thread.interrupt();
+        isKilled = true;
         threadStartedRunning = false;
         printFinish(time);
     }
 
     public void start(int time) {
-
-        if (!threadStartedRunning) { //Thread will start only it was not running previously
-            thread.start();
-        }
+        thread.start();
         printStart(time);
     }
 
@@ -96,7 +99,8 @@ public class Process {
         if (time == enterTime) {
             start(time);
             threadStartedRunning = true;
-        } else if (counter == duration & threadStartedRunning) {
+            counter+=50;
+        } else if (counter == duration && threadStartedRunning) {
             finish(time);
         } else if (threadStartedRunning) { // Counter must be incremented only if thread is running
             counter += 50;
@@ -108,8 +112,9 @@ public class Process {
 
     private void printAction(int time, Command command, Variable result) {
         try {
-            System.out.println("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable" + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
-            this.writer.write("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable" + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
+            System.out.println("Clock:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
+            this.writer.write("Clock:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : "\n"));
+            this.writer.flush();
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
         }
@@ -118,7 +123,8 @@ public class Process {
     private void printStart(int time) {
         try {
             System.out.println("Clock:" + time + ", Process " + id + ": Start");
-            this.writer.write("Clock:" + time + ", Process " + id + ": Start");
+            this.writer.write("Clock:" + time + ", Process " + id + ": Start\n");
+            this.writer.flush();
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
         }
@@ -127,7 +133,8 @@ public class Process {
     private void printFinish(int time) {
         try {
             System.out.println("Clock:" + time + ", Process " + id + ": Finished");
-            this.writer.write("Clock:" + time + ", Process " + id + ": Finished");
+            this.writer.write("Clock:" + time + ", Process " + id + ": Finished\n");
+            this.writer.flush();
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
         }
@@ -150,6 +157,7 @@ public class Process {
     }
 
     public void runCommand(Command command) {
+        if (command == null) return;
 
         final int firstArgument = 0;
         final int secondArgument = 1;

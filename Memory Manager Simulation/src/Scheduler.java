@@ -10,10 +10,11 @@ public class Scheduler implements Runnable {
     @Override
     public void run() {
         setup();
+        MemoryManager.getDiskMemoryInstance().nukeDisk();
 
         for (int time = 0; true; time += 1000) {
 
-            if(noCommands){
+            if(noCommands && allProcessFinished()){
                 //No more commands
                 System.out.println("No more commands, program is finished");
                 break;
@@ -22,7 +23,7 @@ public class Scheduler implements Runnable {
             notify(time);
 
             try {
-                Thread.sleep(200);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -31,8 +32,9 @@ public class Scheduler implements Runnable {
 
     private void setup() {
         try {
-            CommandManager.setup(new File("./Testing/commands.txt"));
-            MemoryManager.setup(new File("./Testing/memconfig.txt"), new File("./Testing/disk.txt"));
+            CommandManager.setup(new File("Testing/commands.txt"));
+            CommandManager.subscribe(this);
+            MemoryManager.setup(new File("Testing/memconfig.txt"),"Testing/disk.txt");
         } catch (FileNotFoundException ex) {
             System.out.println(ex.getMessage());
         }
@@ -50,6 +52,10 @@ public class Scheduler implements Runnable {
         if(i == 0){
             noCommands = true;
         }
+    }
+
+    private boolean allProcessFinished(){
+       return processes.stream().allMatch(process -> !process.isRunning());
     }
 }
 

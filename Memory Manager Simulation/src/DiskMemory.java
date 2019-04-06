@@ -13,7 +13,7 @@ public class DiskMemory {
         try {
             FileWriter fr = new FileWriter(file, true);
             BufferedWriter br = new BufferedWriter(fr);
-            br.write(var.toString());
+            br.write(var.toString()+"\n");
 
             br.close();
             fr.close();

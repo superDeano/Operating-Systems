@@ -10,13 +10,13 @@ public class Process {
     private int duration;
     private int runtime;
     private int counter = 0;
-    private boolean isRunning = false;
+    private boolean threadStartedRunning = false;
     private BufferedWriter writer;
 
     private Thread thread = new Thread(() -> {
         while (true) {
             Command com = CommandManager.getNextCommand();
-            runCommand(com);
+            runCommand(com); //TODO : This is never run
             int toWait = (int) (Math.random() * 1000 + 1);
 
             try {
@@ -77,12 +77,15 @@ public class Process {
 
     private void finish(int time) {
         this.thread.interrupt();
-        isRunning = false;
+        threadStartedRunning = false;
         printFinish(time);
     }
 
     public void start(int time) {
-        thread.start();
+
+        if (!threadStartedRunning) { //Thread will start only it was not running previously
+            thread.start();
+        }
         printStart(time);
     }
 
@@ -90,11 +93,11 @@ public class Process {
         runtime = time;
 
         if (time >= enterTime) {
+            threadStartedRunning = true;
             start(time);
-            isRunning = true;
         } else if (counter >= duration) {
             finish(time);
-        } else if (isRunning) { // Counter must be incremented only if thread is running
+        } else if (threadStartedRunning) { // Counter must be incremented only if thread is running
             counter += 50;
         }
 
@@ -103,6 +106,7 @@ public class Process {
     private void printAction(int time, Command command, Variable result) {
         try {
             this.writer.write("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable" + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
+            System.out.println("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable" + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
         }
@@ -110,7 +114,8 @@ public class Process {
 
     private void printStart(int time) {
         try {
-            this.writer.write("Clock:" + time + ", Process " + id + ": Start");
+            this.writer.write("Clock: " + time + ", Process " + id + ": Start");
+            System.out.println("Clock: " + time + ", Process " + id + ": Start");
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
         }
@@ -118,7 +123,8 @@ public class Process {
 
     private void printFinish(int time) {
         try {
-            this.writer.write("Clock:" + time + ", Process " + id + ": Finished");
+            this.writer.write("Clock: " + time + ", Process " + id + ": Finished");
+            System.out.println("Clock: " + time + ", Process " + id + ": Finished");
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
         }
@@ -145,9 +151,8 @@ public class Process {
         final int firstArgument = 0;
         final int secondArgument = 1;
         try {
-
-            /**
-             * Gets the command to execute from the command Manager
+            System.out.println("Trying to run command");
+            /**Gets the command to execute from the command Manager
              * Use Reflection API to match that command to a memory manager's method
              * Executes the API call then
              * */
@@ -175,7 +180,7 @@ public class Process {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            e.getCause().printStackTrace();
         }
     }
 }

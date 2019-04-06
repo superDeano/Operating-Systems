@@ -15,12 +15,6 @@ title __MEMORY MANAGER SIMULATION's Class Diagram__\n
   
 
   package  {
-    class Configurator {
-    }
-  }
-  
-
-  package  {
     class DiskMemory {
     }
   }
@@ -57,7 +51,6 @@ title __MEMORY MANAGER SIMULATION's Class Diagram__\n
   
 
   Scheduler -up-|> Runnable
-  Scheduler o-- CommandManager : commandManager
 
 
 right footer

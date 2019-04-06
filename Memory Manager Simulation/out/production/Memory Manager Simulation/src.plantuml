@@ -26,14 +26,6 @@ title __SRC's Class Diagram__\n
   
 
   package  {
-    class Configurator {
-        ~ Configurator()
-        {static} - getProcesses()
-    }
-  }
-  
-
-  package  {
     class DiskMemory {
         - file : File
         ~ DiskMemory()
@@ -59,9 +51,9 @@ title __SRC's Class Diagram__\n
         {static} - disk : DiskMemory
         ~ MemoryManager()
         {static} + setup()
-        {static} + store()
-        {static} + release()
-        {static} + lookup()
+        {static} + Store()
+        {static} + Release()
+        {static} + Lookup()
         {static} - mainMemoryHasSpace()
         {static} - findOldestVariable()
     }
@@ -75,6 +67,7 @@ title __SRC's Class Diagram__\n
         - duration : int
         - runtime : int
         - counter : int
+        - isRunning : boolean
         - writer : BufferedWriter
         - thread : Thread
         + Process()
@@ -130,7 +123,6 @@ title __SRC's Class Diagram__\n
   
 
   Scheduler -up-|> Runnable
-  Scheduler o-- CommandManager : commandManager
 
 
 right footer

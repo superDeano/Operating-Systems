@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Scheduler implements Runnable {
-    CommandManager commandManager;
     List<Process> processes = new ArrayList<Process>();
 
     @Override
     public void run() {
         setup();
 
-        for (int time = 0; true; time += 50) {
+        for (int time = 0; true; time += 1000) {
 
             notify(time);
 
@@ -40,3 +39,4 @@ public class Scheduler implements Runnable {
         processes.forEach(process -> process.check(time));
     }
 }
+

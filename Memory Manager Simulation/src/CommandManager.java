@@ -14,6 +14,7 @@ public class CommandManager {
         while (input.hasNextLine()) {
             ArrayList<String> str_command = new ArrayList<String>(Arrays.asList(input.nextLine().split(" ")));
             String command = str_command.get(0);
+            System.out.println("Got Command: " + command);
 
             //Creates a new sub-array of integer for the arguments of the command
             Integer[] args = Arrays.copyOf(str_command.subList(1, str_command.size()).stream().map(Integer::new).toArray(), str_command.subList(1, str_command.size()).stream().map(Integer::new).toArray().length, Integer[].class);

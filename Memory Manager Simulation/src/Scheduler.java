@@ -14,7 +14,7 @@ public class Scheduler implements Runnable {
 
         for (int time = 0; true; time += 1000) {
 
-            if(noCommands && allProcessFinished()){
+            if (noCommands && allProcessFinished()) {
                 //No more commands
                 System.out.println("No more commands, program is finished");
                 break;
@@ -30,11 +30,15 @@ public class Scheduler implements Runnable {
         }
     }
 
+    /**
+     * To get the commands before the processes start running
+     * To set up the virtual memory
+     * */
     private void setup() {
         try {
             CommandManager.setup(new File("Testing/commands.txt"));
             CommandManager.subscribe(this);
-            MemoryManager.setup(new File("Testing/memconfig.txt"),"Testing/disk.txt");
+            MemoryManager.setup(new File("Testing/memconfig.txt"), "Testing/disk.txt");
         } catch (FileNotFoundException ex) {
             System.out.println(ex.getMessage());
         }
@@ -48,14 +52,16 @@ public class Scheduler implements Runnable {
         processes.forEach(process -> process.check(time));
     }
 
-    public void receiveCommandUpdate(int i){
-        if(i == 0){
+    /* To basically know when to end the program as there will be no commands to be executed */
+    public void receiveCommandUpdate(int i) {
+        if (i == 0) {
             noCommands = true;
         }
     }
 
-    private boolean allProcessFinished(){
-       return processes.stream().allMatch(process -> !process.isRunning());
+    /* To know whether all the processes are done */
+    private boolean allProcessFinished() {
+        return processes.stream().allMatch(process -> !process.isRunning());
     }
 }
 

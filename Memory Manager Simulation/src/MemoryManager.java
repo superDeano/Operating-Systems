@@ -12,6 +12,10 @@ public class MemoryManager {
     MemoryManager() {
     }
 
+    /*
+    * Sets up the main memory and disk before the processes start running
+    * */
+
     public static void setup(File memConfig, String diskFile) throws FileNotFoundException {
         Scanner input = new Scanner(memConfig);
         mainMemory = new Variable[input.nextInt()]; // Creates main mainMemory of Pages
@@ -20,7 +24,7 @@ public class MemoryManager {
         input.close();
     }
 
-    public static DiskMemory getDiskMemoryInstance(){
+    public static DiskMemory getDiskMemoryInstance() {
         return disk;
     }
 
@@ -116,6 +120,15 @@ public class MemoryManager {
                     disk.release(id);
 
                     Variable oldestVar = findOldestVariable();
+
+                    /**
+                     * There was a swap, the resulting Variable will tell the process that a swapped happened
+                     * The process will then be able to print it
+                     * */
+                    Integer[] swapping = new Integer[2];
+                    swapping[Variable.oldVariable] = (Integer) oldestVar.getId();
+                    swapping[Variable.newVariable] = id;
+                    temp.setSwapped(swapping);
 
                     disk.store(oldestVar);
                     release(oldestVar.id);

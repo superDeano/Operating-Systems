@@ -14,6 +14,10 @@ public class Main {
             //Discard Number as we dont care;
             input.nextLine();
 
+            /**
+             * To get the processes
+             * Then Store them into a list in the Scheduler
+             * */
             for (int i = 1; input.hasNextLine(); i++) {
                 String[] temp = input.nextLine().split(" ");
                 scheduler.addProcess(new Process(i, Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), writer));

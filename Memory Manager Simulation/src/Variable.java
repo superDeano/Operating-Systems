@@ -4,6 +4,12 @@ public class Variable {
     Integer id;
     Integer value;
     Instant lastAccess;
+    /**
+     * Allows Process to know that a swap has taken place
+     * */
+    Integer [] swapped = null;
+    public final static int oldVariable = 0;
+    public final static int newVariable = 1;
 
     public Variable(int id, Integer value){
         this.id = id;
@@ -40,6 +46,14 @@ public class Variable {
 
     public Instant getLastAccess() {
         return lastAccess;
+    }
+
+    public void setSwapped(Integer[] swapped) {
+        this.swapped = swapped;
+    }
+
+    public Integer[] getSwapped(){
+        return swapped;
     }
 
     @Override

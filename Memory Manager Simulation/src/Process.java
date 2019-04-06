@@ -110,10 +110,20 @@ public class Process {
 
     }
 
+
     private void printAction(int time, Command command, Variable result) {
         try {
-            System.out.println("Clock:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
-            this.writer.write("Clock:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : "\n"));
+            // To print if swap has happened
+            if (result.getSwapped() != null){
+                Integer [] swapped = result.getSwapped();
+                System.out.println("Memory Manager, SWAP: Variable " + swapped[Variable.oldVariable] + " with Variable " + swapped[Variable.newVariable]);
+                this.writer.write("Memory Manager, SWAP: Variable " + swapped[Variable.oldVariable] + " with Variable " + swapped[Variable.newVariable]);
+                writer.newLine();
+            }
+
+            System.out.println("Clock: " + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
+            this.writer.write("Clock: " + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : "\n"));
+            writer.newLine();
             this.writer.flush();
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
@@ -122,8 +132,9 @@ public class Process {
 
     private void printStart(int time) {
         try {
-            System.out.println("Clock:" + time + ", Process " + id + ": Start");
-            this.writer.write("Clock:" + time + ", Process " + id + ": Start\n");
+            System.out.println("Clock: " + time + ", Process " + id + ": Started.");
+            this.writer.write("Clock: " + time + ", Process " + id + ": Started.");
+            writer.newLine();
             this.writer.flush();
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
@@ -132,8 +143,9 @@ public class Process {
 
     private void printFinish(int time) {
         try {
-            System.out.println("Clock:" + time + ", Process " + id + ": Finished");
-            this.writer.write("Clock:" + time + ", Process " + id + ": Finished\n");
+            System.out.println("Clock: " + time + ", Process " + id + ": Finished.");
+            this.writer.write("Clock: " + time + ", Process " + id + ": Finished.");
+            writer.newLine();
             this.writer.flush();
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);

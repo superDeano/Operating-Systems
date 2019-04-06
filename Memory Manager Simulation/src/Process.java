@@ -23,7 +23,7 @@ public class Process {
             try {
                 Thread.sleep(toWait);
             } catch (InterruptedException e) {
-                System.out.println(e.getCause());
+//                System.out.println(e.getCause());
                 System.out.println("Got killed during wait process[" + id + "]");
             }
         }
@@ -127,7 +127,7 @@ public class Process {
             writer.newLine();
             this.writer.flush();
         } catch (IOException e) {
-            System.out.println("Cannot write for: Process " + id);
+//            System.out.println("Cannot write for: Process " + id);
         }
     }
 
@@ -138,7 +138,7 @@ public class Process {
             writer.newLine();
             this.writer.flush();
         } catch (IOException e) {
-            System.out.println("Cannot write for: Process " + id);
+//            System.out.println("Cannot write for: Process " + id);
         }
     }
 
@@ -149,7 +149,7 @@ public class Process {
             writer.newLine();
             this.writer.flush();
         } catch (IOException e) {
-            System.out.println("Cannot write for: Process " + id);
+//            System.out.println("Cannot write for: Process " + id);
         }
     }
 
@@ -201,15 +201,15 @@ public class Process {
 
 
         } catch (NoSuchMethodException e) {
-            System.out.println("Cannot match method");
-            e.printStackTrace();
-            System.out.println(e.getCause());
+//            System.out.println("Cannot match method");
+//            e.printStackTrace();
+//            System.out.println(e.getCause());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            System.out.println(e.getCause());
+//            e.printStackTrace();
+//            System.out.println(e.getCause());
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            System.out.println(e.getCause());
+//            e.printStackTrace();
+//            System.out.println(e.getCause());
         }
     }
 }

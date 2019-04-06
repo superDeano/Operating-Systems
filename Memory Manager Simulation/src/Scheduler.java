@@ -6,12 +6,19 @@ import java.util.List;
 public class Scheduler implements Runnable {
     CommandManager commandManager;
     List<Process> processes = new ArrayList<Process>();
+    boolean noCommands = false;
 
     @Override
     public void run() {
         setup();
 
         for (int time = 0; true; time += 50) {
+
+            if(noCommands){
+                //No more commands
+                System.out.println("No more commands, program is finished");
+                break;
+            }
 
             notify(time);
 
@@ -38,5 +45,11 @@ public class Scheduler implements Runnable {
 
     private void notify(int time) {
         processes.forEach(process -> process.check(time));
+    }
+
+    public void receiveCommandUpdate(int i){
+        if(i == 0){
+            noCommands = true;
+        }
     }
 }

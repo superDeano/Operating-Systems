@@ -4,6 +4,7 @@ import java.util.*;
 
 public class CommandManager {
     static private Queue<Command> commands = new ArrayDeque<>();
+    static private Scheduler observer;
 
     public CommandManager() {
     }
@@ -22,6 +23,17 @@ public class CommandManager {
     }
 
     public static Command getNextCommand() {
-        return commands.poll();
+        Command toReturn = commands.poll();
+        update(commands.size());
+
+        return toReturn;
+    }
+
+    public static void subscribe(Scheduler obj){
+        observer = obj;
+    }
+
+    public static void update(int num){
+        observer.receiveCommandUpdate(num);
     }
 }

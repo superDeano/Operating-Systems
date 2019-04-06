@@ -12,6 +12,7 @@ public class Process {
     private int counter = 0;
     private boolean isRunning = false;
     private BufferedWriter writer;
+    private Object lock = new Object();
 
     private Thread thread = new Thread(() -> {
         while (true) {
@@ -89,19 +90,22 @@ public class Process {
     public void check(int time) {
         runtime = time;
 
-        if (time >= enterTime) {
+        if (time == enterTime) {
             start(time);
             isRunning = true;
-        } else if (counter >= duration) {
+        } else if (counter == duration & isRunning) {
             finish(time);
         } else if (isRunning) { // Counter must be incremented only if thread is running
             counter += 50;
+        }else{
+            //Dead Process
         }
 
     }
 
     private void printAction(int time, Command command, Variable result) {
         try {
+            System.out.println("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable" + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
             this.writer.write("Time:" + time + ", Process " + id + ", " + command.getCommand() + ": Variable" + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
@@ -110,6 +114,7 @@ public class Process {
 
     private void printStart(int time) {
         try {
+            System.out.println("Clock:" + time + ", Process " + id + ": Start");
             this.writer.write("Clock:" + time + ", Process " + id + ": Start");
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);
@@ -118,6 +123,7 @@ public class Process {
 
     private void printFinish(int time) {
         try {
+            System.out.println("Clock:" + time + ", Process " + id + ": Finished");
             this.writer.write("Clock:" + time + ", Process " + id + ": Finished");
         } catch (IOException e) {
             System.out.println("Cannot write for: Process " + id);

@@ -12,7 +12,7 @@ public class Scheduler implements Runnable {
         setup();
         MemoryManager.getDiskMemoryInstance().nukeDisk();
 
-        for (int time = 0; true; time += 1000) {
+        for (int time = 0; true; time += 100) {
 
             if (noCommands && allProcessFinished()) {
                 //No more commands

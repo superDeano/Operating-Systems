@@ -1,15 +1,15 @@
 Clock: 1000, Process 2: Started.
 Clock: 1000, Process 2, store: Variable 1, Value:5
-Clock: 1500, Process 2, store: Variable 2, Value:3
+Clock: 1800, Process 2, store: Variable 2, Value:3
 Clock: 2000, Process 3: Started.
-Clock: 2000, Process 2, store: Variable 3, Value:7
+Clock: 2000, Process 3, store: Variable 3, Value:7
 Clock: 3000, Process 1: Started.
 Clock: 3000, Process 2: Finished.
 Clock: 3000, Process 1, release: Variable 1
 Clock: 2900, Memory Manager, SWAP: Variable 1 with Variable 3
 Clock: 2900, Process 3, lookup: Variable 3, Value:7
-Clock: 3600, Process 3, store: Variable 1, Value:8
-Clock: 3600, Memory Manager, SWAP: Variable 3 with Variable 1
-Clock: 3600, Process 1, lookup: Variable 1, Value:8
+Clock: 3300, Process 1, store: Variable 1, Value:8
+Clock: 3800, Memory Manager, SWAP: Variable 3 with Variable 1
+Clock: 3800, Process 3, lookup: Variable 1, Value:8
 Clock: 5000, Process 3: Finished.
 Clock: 6000, Process 1: Finished.

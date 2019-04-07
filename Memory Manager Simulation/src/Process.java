@@ -121,9 +121,17 @@ public class Process {
                 this.writer.write("Clock: " + time + ", Memory Manager, SWAP: Variable " + swapped[Variable.oldVariable] + " with Variable " + swapped[Variable.newVariable]);
                 writer.newLine();
             }
+            String value;
+            if("lookup".equals(command.getCommand())){
+                value = ((result != null) ? ", Value:" + result.getValue() : " not in memory");
+            }else{
+                value = ((result.getValue() != null) ? ", Value:" + result.getValue() : "");
+            }
 
-            System.out.println("Clock: " + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
-            this.writer.write("Clock: " + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + result.getId() + ((result.getValue() != null) ? ", Value:" + result.getValue() : ""));
+            String log = "Clock: " + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + command.getArguments()[0] + value;
+
+            System.out.println(log);
+            this.writer.write(log);
             writer.newLine();
             this.writer.flush();
         } catch (IOException e) {
@@ -201,15 +209,12 @@ public class Process {
 
 
         } catch (NoSuchMethodException e) {
-//            System.out.println("Cannot match method");
-//            e.printStackTrace();
-//            System.out.println(e.getCause());
+            System.out.println("Cannot match method");
+
         } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//            System.out.println(e.getCause());
+            //Discarded
         } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//            System.out.println(e.getCause());
+            //discarded
         }
     }
 }

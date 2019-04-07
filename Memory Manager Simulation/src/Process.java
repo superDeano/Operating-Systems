@@ -115,7 +115,7 @@ public class Process {
     private void printAction(int time, Command command, Variable result) {
         try {
             // To print if swap has happened
-            if (result.getSwapped() != null) {
+            if (result != null) {
                 Integer[] swapped = result.getSwapped();
                 System.out.println("Clock: " + time + ", Memory Manager, SWAP: Variable " + swapped[Variable.oldVariable] + " with Variable " + swapped[Variable.newVariable]);
                 this.writer.write("Clock: " + time + ", Memory Manager, SWAP: Variable " + swapped[Variable.oldVariable] + " with Variable " + swapped[Variable.newVariable]);

@@ -95,7 +95,7 @@ public class MemoryManager {
      * Then puts it in main memory if there is free space
      * If not, does a swap with the oldest accessed variable in main memory before readying
      */
-    public static Variable lookup(int id) {
+    public static Variable lookup (int id) {
         Variable toReturn = null;
         boolean found = false;
         try {
@@ -126,7 +126,7 @@ public class MemoryManager {
                      * The process will then be able to print it
                      * */
                     Integer[] swapping = new Integer[2];
-                    swapping[Variable.oldVariable] = (Integer) oldestVar.getId();
+                    swapping[Variable.oldVariable] = oldestVar.getId();
                     swapping[Variable.newVariable] = id;
                     temp.setSwapped(swapping);
 

@@ -17,6 +17,9 @@ public class Variable {
         lastAccess = Instant.now();
     }
 
+    public void updateLastAccessed (){
+        lastAccess = Instant.now();
+    }
     public Variable(String s){
         String[] temp = s.split("&");
 

@@ -7,14 +7,15 @@ import java.util.concurrent.Semaphore;
 public class MemoryManager {
     private static Variable[] mainMemory;
     private static Semaphore lock = new Semaphore(1);
+    private static Semaphore lookingForOldVariable = new Semaphore(1);
     private static DiskMemory disk;
 
     MemoryManager() {
     }
 
     /*
-    * Sets up the main memory and disk before the processes start running
-    * */
+     * Sets up the main memory and disk before the processes start running
+     * */
 
     public static void setup(File memConfig, String diskFile) throws FileNotFoundException {
         Scanner input = new Scanner(memConfig);
@@ -35,19 +36,37 @@ public class MemoryManager {
      */
     public static Variable store(int id, int value) {
         boolean canWriteInMainMemory = false;
+        boolean alreadyWrittenInMainMemory = false;
         Variable toStore = new Variable(id, value);
 
         try {
             lock.acquire();
-            for (int i = 0; i < mainMemory.length; i++) {
-                if (mainMemory[i] == null) {
-                    mainMemory[i] = toStore;
-                    canWriteInMainMemory = true;
-                    break;
+
+            if (variableAlreadyExists(id)) {
+
+                for (Variable v : mainMemory) {
+                    if (v.getId() == id) {
+                        v.setValue(value);
+                        alreadyWrittenInMainMemory = true;
+                        return toStore;
+                    }
                 }
-            }
-            if (!canWriteInMainMemory) {
-                disk.store(toStore);
+                if (!alreadyWrittenInMainMemory) {
+                    disk.store(id, value);
+                    return toStore;
+                }
+
+            } else {
+                for (int i = 0; i < mainMemory.length; i++) {
+                    if (mainMemory[i] == null) {
+                        mainMemory[i] = toStore;
+                        canWriteInMainMemory = true;
+                        break;
+                    }
+                }
+                if (!canWriteInMainMemory) {
+                    disk.store(toStore);
+                }
             }
 
         } catch (InterruptedException e) {
@@ -95,46 +114,55 @@ public class MemoryManager {
      * Then puts it in main memory if there is free space
      * If not, does a swap with the oldest accessed variable in main memory before readying
      */
-    public static Variable lookup (int id) {
+    public static Variable lookup(int id) {
         Variable toReturn = null;
         boolean found = false;
         try {
 
             lock.acquire();
-            for (Variable var : mainMemory) {
-                if (var.getId() == id) {
-                    toReturn = var;
-                    found = true;
-                    break;
+
+            //Variable has to be present somewhere to do these
+            if (variableAlreadyExists(id)) {
+                for (Variable var : mainMemory) {
+                    if (var.getId() == id) {
+                        toReturn = var;
+                        found = true;
+                        break;
+                    }
                 }
-            }
 
-            if (!found) { // Not found in Main Memory
-                Variable temp = disk.lookup(id); //Gets it from disk
+                if (!found) { // Not found in Main Memory
+                    Variable temp = disk.lookup(id); //Gets it from disk
 
-                if (mainMemoryHasSpace()) {
-                    store(temp.id, temp.value);
-                    disk.release(temp.id);
-                    return temp;
-                } else { // Has to swap
-                    disk.release(id);
+                    if (mainMemoryHasSpace()) {
+                        store(temp.id, temp.value);
+                        disk.release(temp.id);
+                        return temp;
 
-                    Variable oldestVar = findOldestVariable();
+                    } else { // Has to swap
+                        disk.release(id); //Deletes from disk
 
-                    /**
-                     * There was a swap, the resulting Variable will tell the process that a swapped happened
-                     * The process will then be able to print it
-                     * */
-                    Integer[] swapping = new Integer[2];
-                    swapping[Variable.oldVariable] = oldestVar.getId();
-                    swapping[Variable.newVariable] = id;
-                    temp.setSwapped(swapping);
+                        lookingForOldVariable.acquire();
+                        int oldestVarIndex = findOldestVariableIndex();
+                        lookingForOldVariable.release();
 
-                    disk.store(oldestVar);
-                    release(oldestVar.id);
-                    store(temp.id, temp.value);
+                        Variable oldestVar = mainMemory[oldestVarIndex];
+                        /**
+                         * There was a swap, the resulting Variable will tell the process that a swapped happened
+                         * The process will then be able to print it
+                         * */
+                        Integer[] swapping = new Integer[2];
+                        swapping[Variable.oldVariable] = oldestVar.getId();
+                        swapping[Variable.newVariable] = id;
+                        temp.setSwapped(swapping);
 
-                    toReturn = temp;
+                        disk.store(oldestVar);
+//                        release(oldestVar.id);
+                        temp.updateLastAccessed();
+                        mainMemory[oldestVarIndex] = temp;
+
+                        toReturn = temp;
+                    }
                 }
             }
 
@@ -159,16 +187,62 @@ public class MemoryManager {
     }
 
     private static Variable findOldestVariable() {
-        Instant min = mainMemory[0].getLastAccess();
+        Instant min = Instant.now();
         int index = 0;
 
-        for (int i = 1; i < mainMemory.length; i++) {
+        for (int i = 0; i < mainMemory.length; i++) {
             if (mainMemory[i].getLastAccess().isBefore(min)) {
                 min = mainMemory[i].getLastAccess();
                 index = i;
             }
         }
         return mainMemory[index];
+    }
+
+    private static int findOldestVariableIndex() {
+
+        int index = 0;
+        System.out.println(index +" : last access for variable "+ mainMemory[index].getId() + " is : " + mainMemory[index].getLastAccess());
+
+        System.out.println((index +1 ) +" : last access for variable "+ mainMemory[index + 1].getId() + " is : " + mainMemory[index + 1].getLastAccess());
+
+
+        Instant lastAccessed = mainMemory[index].getLastAccess();
+
+
+        for (int i = 1; i < mainMemory.length; i++) {
+            System.out.println("In for loop");
+
+            String meh = (mainMemory[i].getLastAccess().isBefore(lastAccessed) ? " : true." : " : false.");
+
+            System.out.println(meh);
+
+            if (mainMemory[i].getLastAccess().isBefore(lastAccessed)) {
+
+                lastAccessed = mainMemory[i].getLastAccess();
+                index = i;
+            }
+        }
+        System.out.println("Index is " + index);
+        return index;
+    }
+
+    /**
+     * Function which checks whether a variable is already present in main memory or disk
+     * Checks the id so the value can be overridden instead of duplicating the variable
+     */
+    private static boolean variableAlreadyExists(int id) {
+
+        for (Variable v : mainMemory) {
+            if (v != null) {
+                if (id == v.getId()) {
+                    System.out.println("Variable of ID : " + id + " already exist in Main memory");
+                    return true;
+                }
+            }
+        }
+
+        return disk.variableExists(id);
     }
 }
 

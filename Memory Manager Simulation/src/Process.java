@@ -115,17 +115,17 @@ public class Process {
     private void printAction(int time, Command command, Variable result) {
         try {
             // To print if swap has happened
-            if (result != null && result.getSwapped() !=null) {
+            if (result != null && result.getSwapped() != null) {
                 Integer[] swapped = result.getSwapped();
                 System.out.println("Clock: " + time + ", Memory Manager, SWAP: Variable " + swapped[Variable.oldVariable] + " with Variable " + swapped[Variable.newVariable]);
                 this.writer.write("Clock: " + time + ", Memory Manager, SWAP: Variable " + swapped[Variable.oldVariable] + " with Variable " + swapped[Variable.newVariable]);
                 writer.newLine();
             }
             String value;
-            if("lookup".equals(command.getCommand())){
-                value = ((result != null) ? ", Value:" + result.getValue() : " not in memory");
-            }else{
-                value = ((result.getValue() != null) ? ", Value:" + result.getValue() : "");
+            if ("lookup".equals(command.getCommand())) {
+                value = ((result != null) ? ", Value: " + result.getValue() : " not in memory");
+            } else {
+                value = ((result.getValue() != null) ? ", Value: " + result.getValue() : "");
             }
 
             String log = "Clock: " + time + ", Process " + id + ", " + command.getCommand() + ": Variable " + command.getArguments()[0] + value;

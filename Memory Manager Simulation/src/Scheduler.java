@@ -16,14 +16,14 @@ public class Scheduler implements Runnable {
 
             if (noCommands && allProcessFinished()) {
                 //No more commands
-                System.out.println("No more commands, program is finished");
+                System.out.println("No more commands, Processes are all finished. Program is finished");
                 break;
             }
 
             notify(time);
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(125);
             } catch (InterruptedException e) {
 //                e.printStackTrace();
             }
